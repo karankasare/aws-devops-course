@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>AWS DevOps Pro — Complete Course</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07090F;--bg2:#0C1020;--bg3:#101828;
+  --o:#FF9900;--od:rgba(255,153,0,.12);--ob:rgba(255,153,0,.25);
+  --g:#00D68F;--gd:rgba(0,214,143,.1);--gb:rgba(0,214,143,.25);
+  --b:#4A9EFF;--bd:rgba(74,158,255,.1);--bb:rgba(74,158,255,.25);
+  --r:#FF4757;--rd:rgba(255,71,87,.1);--rb:rgba(255,71,87,.25);
+  --y:#FFD60A;--p:#A855F7;
+  --t:#E8F0FF;--t2:#8899BB;--t3:#445577;
+  --br:rgba(255,153,0,.15);--br2:rgba(255,255,255,.07);
+  --mono:'Courier New',monospace
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:repeating-linear-gradient(0deg,rgba(255,153,0,.015) 0px,transparent 1px,transparent 49px,rgba(255,153,0,.015) 50px),
+  repeating-linear-gradient(90deg,rgba(255,153,0,.015) 0px,transparent 1px,transparent 49px,rgba(255,153,0,.015) 50px)}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:rgba(255,153,0,.35);border-radius:2px}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:999;height:54px;
+  display:flex;align-items:center;gap:8px;padding:0 16px;
+  background:rgba(7,9,15,.96);backdrop-filter:blur(20px);border-bottom:1px solid var(--br)}
+.nav-logo{display:flex;align-items:center;gap:8px;flex-shrink:0;text-decoration:none}
+.nav-logo-sq{width:30px;height:30px;background:var(--o);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:10px;color:#000}
+.nav-logo-txt{font-weight:700;font-size:14px;color:var(--t)}
+.nav-logo-txt span{color:var(--o)}
+.nav-links{display:flex;gap:2px;overflow-x:auto;flex:1}
+.nav-links::-webkit-scrollbar{height:0}
+.nb{padding:5px 10px;border-radius:6px;font-size:11px;font-family:var(--mono);
+  cursor:pointer;white-space:nowrap;border:none;background:transparent;color:var(--t2);transition:all .2s}
+.nb:hover,.nb.on{background:var(--od);color:var(--o)}
+.cert-badge{background:var(--o);color:#000;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--mono);flex-shrink:0}
+
+/* LAYOUT */
+.z1{position:relative;z-index:1}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px}
+.sec{padding:80px 0 60px}
+.sec-alt{background:rgba(0,0,0,.3)}
+.sec-head{text-align:center;margin-bottom:44px}
+.sec-tag{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--o);margin-bottom:10px}
+.sec-head h2{font-size:clamp(24px,4vw,42px);font-weight:700;line-height:1.15}
+.sec-head h2 em{font-style:normal;color:var(--o)}
+.sec-head p{font-family:var(--mono);font-size:11px;color:var(--t2);margin-top:8px;line-height:1.7}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:54px;overflow:hidden;position:relative}
+.hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 70% 50% at 50% 20%,rgba(255,153,0,.07),transparent),radial-gradient(ellipse 40% 30% at 80% 80%,rgba(74,158,255,.05),transparent)}
+.hero-inner{text-align:center;position:relative;z-index:1;padding:40px 16px}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;background:var(--od);border:1px solid var(--ob);
+  padding:6px 16px;border-radius:30px;margin-bottom:24px;font-family:var(--mono);font-size:11px;color:var(--o);animation:up .6s ease both}
+.dot{width:7px;height:7px;background:var(--o);border-radius:50%;animation:blink 1.2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.hero-h1{font-size:clamp(30px,7vw,80px);font-weight:700;line-height:1.05;margin-bottom:18px;animation:up .6s .1s ease both}
+.hero-h1 .grad{background:linear-gradient(135deg,#FF9900,#FFD700,#FF6B00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:clamp(12px,1.8vw,15px);color:var(--t2);line-height:1.8;max-width:580px;margin:0 auto 28px;font-family:var(--mono);animation:up .6s .2s ease both}
+.hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:up .6s .3s ease both}
+.btn-o{display:inline-flex;align-items:center;gap:6px;background:var(--o);color:#000;padding:11px 22px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;border:none;transition:all .25s}
+.btn-o:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn-w{display:inline-flex;align-items:center;gap:6px;background:transparent;color:var(--t);padding:11px 22px;border-radius:9px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid var(--br2);transition:all .25s}
+.btn-w:hover{border-color:var(--o);color:var(--o)}
+.hero-stats{display:flex;justify-content:center;gap:36px;margin-top:48px;flex-wrap:wrap;animation:up .6s .4s ease both}
+.hs{text-align:center}.hs-n{font-size:30px;font-weight:700;color:var(--o)}.hs-l{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px}
+.hero-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;max-width:720px;margin:32px auto 0;animation:up .6s .5s ease both}
+.chip{background:var(--bg3);border:1px solid var(--br2);padding:4px 10px;border-radius:5px;font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;transition:all .2s}
+.chip:hover{border-color:var(--o);color:var(--o);background:var(--od)}
+
+/* ROADMAP */
+.rmap{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:760px){.rmap{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.rmap{grid-template-columns:1fr}}
+.rc{background:var(--bg3);border:1px solid var(--br2);border-radius:12px;padding:20px 16px;position:relative;overflow:hidden;transition:all .3s}
+.rc:hover{transform:translateY(-3px);border-color:rgba(255,153,0,.3)}
+.rc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.rc.lv0::before{background:var(--g)}.rc.lv1::before{background:var(--b)}.rc.lv2::before{background:var(--o)}.rc.lv3::before{background:var(--p)}
+.rc-tag{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+.rc.lv0 .rc-tag{color:var(--g)}.rc.lv1 .rc-tag{color:var(--b)}.rc.lv2 .rc-tag{color:var(--o)}.rc.lv3 .rc-tag{color:var(--p)}
+.rc h3{font-size:14px;font-weight:700;margin-bottom:10px}
+.ri{font-family:var(--mono);font-size:10px;color:var(--t2);padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:5px}
+.ri:last-child{border:none}.ri::before{content:'›';color:var(--o)}
+
+/* SERVICE CARDS */
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.sc{background:var(--bg3);border:1px solid var(--br2);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .3s;display:flex;flex-direction:column}
+.sc:hover{border-color:var(--o);transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.sc-top{padding:18px 18px 14px;border-bottom:1px solid var(--br2)}
+.sc-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sc-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.sc-head h3{font-size:14px;font-weight:700;margin-bottom:2px}
+.sc-cat{font-family:var(--mono);font-size:10px;color:var(--o)}
+.sc-simple{font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.7}
+.sc-body{padding:12px 18px;flex:1}
+.when-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);font-family:var(--mono);margin-bottom:7px}
+.wi{font-family:var(--mono);font-size:11px;color:var(--t);padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:7px;line-height:1.5}
+.wi:last-child{border:none}.wi::before{content:'▸';color:var(--o);font-size:11px;flex-shrink:0}
+.sc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.stag{background:var(--od);border:1px solid var(--ob);padding:2px 7px;border-radius:4px;font-family:var(--mono);font-size:9px;color:var(--o)}
+.sc-foot{padding:10px 18px;border-top:1px solid var(--br2);display:flex;align-items:center;justify-content:space-between}
+.sc-btn{font-family:var(--mono);font-size:10px;color:var(--o);cursor:pointer;background:none;border:none;padding:0}
+
+/* PIPELINE */
+.pipe-box{background:rgba(0,0,0,.6);border:1px solid var(--br);border-radius:14px;overflow:hidden}
+.pipe-bar{display:flex;align-items:center;gap:8px;padding:12px 16px;background:rgba(0,0,0,.4);border-bottom:1px solid var(--br2);flex-wrap:wrap}
+.run-btn{background:var(--g);color:#000;border:none;border-radius:8px;padding:8px 16px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;transition:all .2s}
+.run-btn:hover{filter:brightness(1.15)}.run-btn:disabled{background:var(--t3);cursor:not-allowed}
+.rst-btn{background:var(--bg3);color:var(--t2);border:1px solid var(--br2);border-radius:8px;padding:8px 12px;font-family:var(--mono);font-size:10px;cursor:pointer}
+.ptabs{display:flex;gap:4px;margin-left:auto}
+.ptab{padding:5px 11px;border-radius:6px;font-family:var(--mono);font-size:10px;cursor:pointer;border:1px solid var(--br2);background:transparent;color:var(--t3);transition:all .2s}
+.ptab.on{background:var(--od);border-color:var(--ob);color:var(--o)}
+.pipe-stages{display:flex;overflow-x:auto;padding:20px 16px;gap:0;align-items:center}
+.pipe-stages::-webkit-scrollbar{height:3px}
+.pstage{display:flex;flex-direction:column;align-items:center;flex:1;min-width:88px;position:relative}
+.pstage+.pstage::before{content:'';position:absolute;left:0;top:28px;width:100%;height:2px;background:var(--br2);z-index:0}
+.psb{background:var(--bg2);border:2px solid var(--br2);border-radius:9px;padding:12px 8px;text-align:center;position:relative;z-index:1;min-width:80px;transition:all .4s}
+.psb.run{border-color:var(--o);background:rgba(255,153,0,.07);animation:pp 1.2s infinite}
+.psb.done{border-color:var(--g);background:rgba(0,214,143,.07)}
+.psb.fail{border-color:var(--r);background:rgba(255,71,87,.07);animation:shk .4s}
+@keyframes pp{0%,100%{box-shadow:0 0 0 0 rgba(255,153,0,.25)}50%{box-shadow:0 0 0 7px rgba(255,153,0,0)}}
+@keyframes shk{0%,100%{transform:none}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.psdot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--t3)}
+.psdot.run{background:var(--o);animation:blink .8s infinite}.psdot.ok{background:var(--g)}.psdot.err{background:var(--r)}
+.psicon{font-size:22px;margin-bottom:4px}.psname{font-weight:700;font-size:11px;margin-bottom:1px}.pssvc{font-family:var(--mono);font-size:9px;color:var(--o)}
+.parrow{font-size:16px;color:var(--o);opacity:.35;flex-shrink:0;padding:0 3px;animation:ab 2s infinite}
+@keyframes ab{0%,100%{opacity:.15}60%{opacity:.7}}
+.plog-wrap{border-top:1px solid var(--br2)}
+.plog-head{padding:7px 16px;background:rgba(0,0,0,.35);font-family:var(--mono);font-size:10px;color:var(--t3);display:flex;align-items:center;justify-content:space-between}
+.plog-body{height:155px;overflow-y:auto;padding:10px 16px;font-family:var(--mono);font-size:11px;line-height:1.9}
+.ll{animation:fi .25s ease}.ll::before{font-size:9px}
+@keyframes fi{from{opacity:0}to{opacity:1}}
+.lt{color:var(--t3)}.li{color:#00D4FF}.lo{color:var(--g)}.lw{color:var(--y)}.le{color:var(--r)}.ls{color:var(--p)}.lc{color:var(--o)}
+
+/* FLOW STEPS */
+.fsteps{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.fstep{display:flex;align-items:flex-start;gap:11px;padding:12px 14px;background:var(--bg3);border:1px solid var(--br2);border-radius:9px;transition:all .3s}
+.fstep:hover{border-color:var(--ob);background:var(--od)}
+.fsn{width:26px;height:26px;background:var(--o);color:#000;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0}
+.fsb h4{font-size:12px;font-weight:700;margin-bottom:3px}.fsb p{font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.6}
+
+/* ARCH */
+.arch-box{background:rgba(0,0,0,.5);border:1px solid var(--br);border-radius:14px;padding:28px 20px;overflow-x:auto}
+.arch-layer{margin-bottom:16px}
+.layer-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;border-left:2px solid var(--o);padding-left:8px;opacity:.7}
+.arow{display:flex;align-items:center;gap:0;flex-wrap:wrap;min-width:540px}
+.anode{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0}
+.anbox{width:74px;height:64px;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:1px solid;cursor:pointer;transition:all .3s}
+.anbox:hover{transform:scale(1.08)}
+.an-ico{font-size:18px}.an-lbl{font-family:var(--mono);font-size:9px;text-align:center;line-height:1.2}
+.an-badge{font-family:var(--mono);font-size:8px;background:var(--od);border:1px solid var(--ob);padding:1px 5px;border-radius:3px;color:var(--o)}
+.aline{flex:1;height:2px;min-width:20px;position:relative;overflow:hidden}
+.aline::after{content:'';position:absolute;top:0;left:-60%;width:60%;height:100%;animation:lf 2s linear infinite}
+@keyframes lf{to{left:160%}}
+.aline.or{background:rgba(255,153,0,.15)}.aline.or::after{background:linear-gradient(90deg,transparent,var(--o),transparent)}
+.aline.bl{background:rgba(74,158,255,.15)}.aline.bl::after{background:linear-gradient(90deg,transparent,var(--b),transparent)}
+.aline.gr{background:rgba(0,214,143,.15)}.aline.gr::after{background:linear-gradient(90deg,transparent,var(--g),transparent)}
+.aarr{font-size:14px;color:var(--o);opacity:.5;flex-shrink:0;animation:ab 2s infinite}
+
+/* COMPARE TABLE */
+.cmp{overflow-x:auto;border-radius:10px;overflow:hidden;border:1px solid var(--br2);margin:12px 0}
+.ctbl{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px}
+.ctbl th{padding:10px 12px;background:rgba(255,153,0,.07);border:1px solid var(--br2);font-size:10px;font-weight:700;color:var(--o)}
+.ctbl td{padding:9px 12px;border:1px solid var(--br2);color:var(--t2);vertical-align:top;line-height:1.5}
+.ctbl tr:hover td{background:rgba(255,255,255,.02)}
+.yes{color:var(--g)!important}.no{color:var(--r)!important}.warn{color:var(--y)!important}
+
+/* CODE */
+.cblk{background:rgba(0,0,0,.7);border:1px solid rgba(255,153,0,.12);border-radius:9px;overflow:hidden;margin:10px 0}
+.ctop{display:flex;align-items:center;justify-content:space-between;padding:7px 13px;background:rgba(0,0,0,.4);border-bottom:1px solid rgba(255,255,255,.05);font-family:var(--mono);font-size:10px;color:var(--t3)}
+.cbody{padding:13px;font-family:var(--mono);font-size:11px;line-height:1.9;overflow-x:auto;color:#89DDFF;white-space:pre}
+.kw{color:var(--o)}.str{color:var(--g)}.cm{color:var(--t3)}.num{color:var(--y)}
+
+/* HYBRID */
+.hgrid{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:start}
+@media(max-width:640px){.hgrid{grid-template-columns:1fr}}
+.hpanel{background:var(--bg3);border:1px solid var(--br2);border-radius:12px;padding:18px}
+.hpanel-lbl{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+.hsvc{display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,.02);border:1px solid var(--br2);border-radius:8px;margin-bottom:7px;font-family:var(--mono);font-size:11px}
+.hsvc-ico{font-size:16px;flex-shrink:0}.hsvc-n{font-weight:600;font-size:11px}.hsvc-d{font-size:9px;color:var(--t3);margin-top:1px}
+.hmid{display:flex;flex-direction:column;align-items:center;gap:6px}
+.cpill{background:rgba(255,153,0,.08);border:2px solid rgba(255,153,0,.3);border-radius:10px;padding:11px 15px;text-align:center;min-width:145px}
+.cpill-n{font-weight:700;font-size:12px;color:var(--o);margin-bottom:2px}
+.cpill-d{font-family:var(--mono);font-size:9px;color:var(--t3)}
+.cline{width:2px;height:20px;background:linear-gradient(to bottom,var(--o),rgba(255,153,0,.1))}
+
+/* LABS */
+.lab{background:var(--bg3);border:1px solid rgba(0,214,143,.2);border-radius:14px;overflow:hidden;margin-bottom:18px}
+.lab-h{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(0,214,143,.06);border-bottom:1px solid rgba(0,214,143,.15)}
+.lab-ico{font-size:20px}.lab-title{font-weight:700;font-size:14px}.lab-sub{font-family:var(--mono);font-size:10px;color:var(--t2)}
+.lab-badge{margin-left:auto;background:var(--gd);border:1px solid var(--gb);padding:2px 9px;border-radius:4px;font-family:var(--mono);font-size:9px;color:var(--g)}
+.lab-body{padding:18px}
+.lab-obj{font-family:var(--mono);font-size:12px;color:var(--t2);line-height:1.7;border-left:3px solid var(--g);padding-left:13px;margin-bottom:14px}
+.lsteps{display:flex;flex-direction:column;gap:9px}
+.lstep{display:flex;gap:9px;align-items:flex-start}
+.lsn{min-width:22px;height:22px;background:var(--gd);border:1px solid var(--gb);color:var(--g);border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;flex-shrink:0;font-family:var(--mono)}
+.lst{font-family:var(--mono);font-size:11px;color:var(--t);line-height:1.6}
+.lst b{color:var(--g)}.lst code{color:var(--o);background:var(--od);padding:1px 5px;border-radius:3px;font-size:10px}
+.lab-checks{margin-top:14px;padding:12px 14px;background:rgba(0,214,143,.04);border:1px solid rgba(0,214,143,.15);border-radius:8px}
+.lchk-title{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--g);margin-bottom:7px;text-transform:uppercase;letter-spacing:1px}
+.lchk-item{font-family:var(--mono);font-size:11px;color:var(--t2);padding:3px 0;display:flex;align-items:center;gap:7px}
+.lchk-item::before{content:'☐';color:var(--t3);font-size:13px}
+
+/* DEBUG */
+.dbug{background:var(--bg3);border:1px solid var(--br2);border-radius:14px;overflow:hidden;margin-bottom:16px}
+.dbug-h{display:flex;align-items:center;gap:9px;padding:12px 17px;border-bottom:1px solid var(--br2)}
+.dbug-h.e{background:rgba(255,71,87,.07);border-bottom-color:rgba(255,71,87,.2)}
+.dbug-h.w{background:rgba(255,214,10,.05);border-bottom-color:rgba(255,214,10,.15)}
+.dbug-title{font-weight:700;font-size:13px}.dbug-svc{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--t3)}
+.dbug-body{padding:17px}
+.err-box{background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.2);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-family:var(--mono);font-size:11px;color:var(--r);line-height:1.7}
+.why-box{background:rgba(255,214,10,.04);border-left:3px solid var(--y);padding:10px 14px;margin-bottom:12px;font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.7}
+.fxs{display:flex;flex-direction:column;gap:8px}
+.fx{display:flex;gap:9px;align-items:flex-start}
+.fxn{min-width:21px;height:21px;background:var(--o);color:#000;border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;flex-shrink:0}
+.fxt{font-family:var(--mono);font-size:11px;color:var(--t);line-height:1.6}
+.fxt code{color:var(--o);background:var(--od);padding:1px 5px;border-radius:3px;font-size:10px}
+
+/* TUTOR */
+.tutor-wrap{max-width:820px;margin:0 auto;background:rgba(0,0,0,.5);border:1px solid var(--br);border-radius:14px;overflow:hidden}
+.tutor-top{display:flex;align-items:center;gap:10px;padding:13px 18px;background:var(--od);border-bottom:1px solid var(--ob)}
+.tutor-av{width:34px;height:34px;background:var(--o);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.tutor-msgs{height:380px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.tmsg{display:flex;gap:9px}.tmsg.user{flex-direction:row-reverse}
+.tav{width:28px;height:28px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
+.tmsg.ai .tav{background:var(--od);border:1px solid var(--ob)}.tmsg.user .tav{background:var(--bd);border:1px solid var(--bb)}
+.tbub{max-width:84%;padding:10px 13px;border-radius:10px;font-family:var(--mono);font-size:12px;line-height:1.8}
+.tmsg.ai .tbub{background:var(--bg3);border:1px solid var(--br2)}.tmsg.user .tbub{background:var(--bd);border:1px solid var(--bb)}
+.tutor-typing{display:none;padding:10px 13px;background:var(--bg3);border:1px solid var(--br2);border-radius:10px;font-family:var(--mono);font-size:12px;color:var(--t3);align-items:center;gap:8px}
+.tdots span{display:inline-block;width:5px;height:5px;background:var(--o);border-radius:50%;margin:0 2px;animation:td .8s infinite}
+.tdots span:nth-child(2){animation-delay:.15s}.tdots span:nth-child(3){animation-delay:.3s}
+@keyframes td{0%,100%{transform:none}50%{transform:translateY(-5px)}}
+.tutor-qq{display:flex;flex-wrap:wrap;gap:5px;padding:9px 14px;border-top:1px solid var(--br2)}
+.qq{background:var(--bg3);border:1px solid var(--br2);border-radius:5px;padding:4px 9px;font-family:var(--mono);font-size:10px;color:var(--t2);cursor:pointer;transition:all .2s}
+.qq:hover{border-color:var(--o);color:var(--o);background:var(--od)}
+.tutor-inp-row{display:flex;gap:7px;padding:11px 14px;border-top:1px solid var(--br2);background:rgba(0,0,0,.2)}
+.tinp{flex:1;background:var(--bg3);border:1px solid var(--br2);border-radius:8px;padding:9px 12px;font-family:var(--mono);font-size:12px;color:var(--t);outline:none;resize:none;height:40px;transition:border .2s}
+.tinp:focus{border-color:var(--o)}
+.tsend{background:var(--o);color:#000;border:none;border-radius:8px;width:40px;height:40px;cursor:pointer;font-size:15px;transition:all .2s;flex-shrink:0}
+.tsend:disabled{background:var(--t3);cursor:not-allowed}
+
+/* QUIZ */
+.qcard{background:var(--bg3);border:1px solid var(--br2);border-radius:14px;padding:22px;margin-bottom:16px}
+.qmeta{display:flex;gap:7px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.qn{font-family:var(--mono);font-size:10px;color:var(--t3)}
+.qdom{background:var(--od);border:1px solid var(--ob);padding:2px 8px;border-radius:4px;font-family:var(--mono);font-size:9px;color:var(--o)}
+.qdif{font-family:var(--mono);font-size:10px}
+.qq-q{font-size:14px;font-weight:600;margin-bottom:16px;line-height:1.6}
+.qopts{display:flex;flex-direction:column;gap:6px}
+.qopt{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;background:rgba(255,255,255,.02);border:1px solid var(--br2);border-radius:8px;cursor:pointer;transition:all .2s;font-family:var(--mono);font-size:12px;line-height:1.5}
+.qopt:hover{border-color:rgba(255,153,0,.3);background:var(--od)}
+.qopt.correct{border-color:var(--g);background:var(--gd);color:var(--g)}.qopt.wrong{border-color:var(--r);background:var(--rd);color:var(--r)}
+.qltr{min-width:21px;height:21px;border-radius:5px;border:1px solid var(--br2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;flex-shrink:0}
+.qexp{margin-top:11px;padding:11px 13px;background:rgba(0,214,143,.05);border:1px solid rgba(0,214,143,.2);border-radius:8px;font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.7;display:none}
+.qexp.show{display:block}
+
+/* CHEAT */
+.cheat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.cheat-card{background:var(--bg3);border:1px solid var(--br2);border-radius:12px;padding:17px}
+.cheat-card h4{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--o);margin-bottom:11px;text-transform:uppercase;letter-spacing:1px}
+.crow{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-family:var(--mono);font-size:10px}
+.crow:last-child{border:none}
+.ck{color:var(--t2)}.cv{color:var(--t);text-align:right;font-size:10px}
+.pb-item{margin-bottom:11px}
+.pb-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;margin-bottom:5px}
+.pb-track{height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.pb-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--o),#FFD700);transition:width 1.6s ease;width:0}
+
+/* INFO GRID */
+.igrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px;margin-top:22px}
+.icard{background:var(--bg3);border:1px solid var(--br2);border-radius:12px;padding:16px}
+.icard-ico{font-size:20px;margin-bottom:8px}.icard-t{font-size:12px;font-weight:700;margin-bottom:5px}
+.icard-d{font-family:var(--mono);font-size:10px;color:var(--t2);line-height:1.6}
+
+/* MODAL */
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.87);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(12px)}
+#modal.open{display:flex}
+.mbox{background:#0A1020;border:1px solid var(--br);border-radius:14px;padding:28px;max-width:720px;width:100%;max-height:88vh;overflow-y:auto;position:relative}
+.mclose{position:absolute;top:12px;right:13px;background:none;border:none;color:var(--t2);font-size:20px;cursor:pointer}
+.mclose:hover{color:var(--o)}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(20px);transition:opacity .6s,transform .6s}
+.rev.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<nav id="nav" class="z1">
+  <a class="nav-logo" href="#"><div class="nav-logo-sq">AWS</div><span class="nav-logo-txt">Dev<span>Ops</span> Pro</span></a>
+  <div class="nav-links">
+    <button class="nb" data-goto="hero">🏠</button>
+    <button class="nb" data-goto="roadmap">Roadmap</button>
+    <button class="nb" data-goto="d1">SDLC</button>
+    <button class="nb" data-goto="d2">IaC</button>
+    <button class="nb" data-goto="d3">Monitoring</button>
+    <button class="nb" data-goto="d4">Security</button>
+    <button class="nb" data-goto="d5">Events</button>
+    <button class="nb" data-goto="d6">HA &amp; DR</button>
+    <button class="nb" data-goto="pipeline">▶ Pipeline</button>
+    <button class="nb" data-goto="arch">Architecture</button>
+    <button class="nb" data-goto="hybrid">Hybrid</button>
+    <button class="nb" data-goto="labs">🧪 Labs</button>
+    <button class="nb" data-goto="debug">🐛 Debug</button>
+    <button class="nb" data-goto="tutor">🤖 AI Tutor</button>
+    <button class="nb" data-goto="quiz">📝 Exam</button>
+    <button class="nb" data-goto="cheat">📋 Cheat Sheet</button>
+  </div>
+  <div class="cert-badge">DOP-C02</div>
+</nav>
+
+<section id="hero" class="sec z1">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-pill"><div class="dot"></div>AWS Certified DevOps Engineer — Professional | DOP-C02 | 2025</div>
+    <h1 class="hero-h1">Complete AWS DevOps<br><span class="grad">Beginner → Expert</span></h1>
+    <p class="hero-sub">Every service · Animated data flows · 15+ Hands-on Labs · AI Tutor<br>Explained simply AND professionally — learn once, never forget</p>
+    <div class="hero-btns">
+      <button class="btn-o" data-goto="roadmap">▶ Start Learning</button>
+      <button class="btn-w" data-goto="pipeline">⚡ Live Pipeline</button>
+      <button class="btn-w" data-goto="tutor">🤖 AI Tutor</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hs"><div class="hs-n">6</div><div class="hs-l">Exam Domains</div></div>
+      <div class="hs"><div class="hs-n">80+</div><div class="hs-l">Services Covered</div></div>
+      <div class="hs"><div class="hs-n">15+</div><div class="hs-l">Hands-on Labs</div></div>
+      <div class="hs"><div class="hs-n">AI</div><div class="hs-l">Tutor Built-in</div></div>
+    </div>
+    <div id="heroChips" class="hero-chips"></div>
+  </div>
+</section>
+
+<section id="roadmap" class="sec sec-alt z1">
+  <div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Learning Path</span><h2>Beginner → <em>Expert</em> Roadmap</h2><p>Follow this structured path. Each level builds on the previous one.</p></div><div class="rmap rev" id="rmapGrid"></div></div>
+</section>
+<section id="d1" class="sec z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Domain 1 · 22%</span><h2>SDLC <em>Automation</em></h2><p>Build, Test, Deploy automatically. Core of DevOps on AWS.</p></div><div class="sg rev" id="d1g"></div></div></section>
+<section id="d2" class="sec sec-alt z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Domain 2 · 17%</span><h2>Infrastructure as <em>Code</em></h2><p>Your infra in code — versioned, tested, repeatable.</p></div><div class="sg rev" id="d2g"></div></div></section>
+<section id="d3" class="sec z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Domain 3 · 15%</span><h2>Monitoring & <em>Observability</em></h2><p>Build full visibility into every layer of your system.</p></div><div class="sg rev" id="d3g"></div></div></section>
+<section id="d4" class="sec sec-alt z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Domain 4 · 10%</span><h2>Security & <em>Compliance</em></h2><p>Security is code. Automate guardrails. Detect threats automatically.</p></div><div class="sg rev" id="d4g"></div></div></section>
+<section id="d5" class="sec z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Domain 5 · 18%</span><h2>Incident & <em>Event Response</em></h2><p>Self-healing systems that react faster than humans.</p></div><div class="sg rev" id="d5g"></div></div></section>
+<section id="d6" class="sec sec-alt z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Domain 6 · 18%</span><h2>High Availability & <em>DR</em></h2><p>Design for failure. Build systems that survive anything.</p></div><div class="sg rev" id="d6g"></div></div></section>
+
+<section id="pipeline" class="sec z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Live Simulation</span><h2>Watch Code: <em>Commit → Production</em></h2><p>Real AWS services · Animated log stream · 3 pipeline types</p></div><div class="pipe-box rev" id="pipeBox"></div><div class="fsteps rev" id="fsteps"></div></div></section>
+
+<section id="arch" class="sec sec-alt z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// System Design</span><h2>Production AWS <em>Architecture</em></h2><p>Every layer with animated data flows. Click any service for detail.</p></div><div class="arch-box rev" id="archBox"></div><div class="rev" style="margin-top:40px" id="cmpBox"></div></div></section>
+
+<section id="hybrid" class="sec z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Hybrid Setup</span><h2>On-Premises ↔ <em>AWS Cloud</em></h2><p>Direct Connect, VPN, Transit Gateway, SSM Hybrid — complete animated walkthrough.</p></div><div class="rev" id="hybridBox"></div></div></section>
+
+<section id="labs" class="sec sec-alt z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Hands-On Labs</span><h2>Build Real Things — <em>15+ Labs</em></h2><p>Step-by-step projects that reinforce every concept.</p></div><div class="rev" id="labsBox"></div></div></section>
+
+<section id="debug" class="sec z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Debug Lab</span><h2>Real Errors — <em>How to Fix</em></h2><p>Exact production errors with root cause and step-by-step fixes.</p></div><div class="rev" id="debugBox"></div></div></section>
+
+<section id="tutor" class="sec sec-alt z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// AI Tutor</span><h2>Ask <em>Anything</em> About AWS DevOps</h2><p>Powered by Claude AI — expert answers with real examples.</p></div>
+  <div class="tutor-wrap rev">
+    <div class="tutor-top"><div class="tutor-av">🤖</div><div><div style="font-weight:700;font-size:14px">AWS DevOps AI Tutor</div><div style="font-family:var(--mono);font-size:10px;color:var(--t2)">Powered by Claude · Ask anything · Get real examples</div></div></div>
+    <div class="tutor-msgs" id="tutorMsgs">
+      <div class="tmsg ai"><div class="tav">🤖</div><div class="tbub">Hi! I am your AWS DevOps tutor. Ask me anything!<br><br>Try: "Explain SQS vs SNS vs EventBridge simply"<br>Or: "Show Blue/Green deployment step by step"<br>Or: "Design a DR setup with 15 min RTO"</div></div>
+    </div>
+    <div class="tmsg ai" id="tutorTyping" style="margin:0 16px 10px;display:none">
+      <div class="tav">🤖</div>
+      <div class="tutor-typing" style="display:flex">Thinking<div class="tdots"><span></span><span></span><span></span></div></div>
+    </div>
+    <div class="tutor-qq" id="tutorQQ"></div>
+    <div class="tutor-inp-row">
+      <textarea class="tinp" id="tutorInp" placeholder="Ask anything about AWS DevOps..." rows="1"></textarea>
+      <button class="tsend" id="tsendBtn">&#10148;</button>
+    </div>
+  </div>
+</div></section>
+
+<section id="quiz" class="sec z1"><div class="wrap" style="max-width:820px"><div class="sec-head rev"><span class="sec-tag">// Practice Exam</span><h2>DOP-C02 <em>Practice Questions</em></h2><p>Scenario-based questions like the real exam. Detailed explanations.</p></div><div class="rev" id="quizBox"></div></div></section>
+
+<section id="cheat" class="sec sec-alt z1"><div class="wrap"><div class="sec-head rev"><span class="sec-tag">// Quick Reference</span><h2>The <em>Cheat Sheet</em></h2><p>Every limit, comparison, and exam gotcha — one page.</p></div><div class="rev" id="pbBox" style="max-width:680px;margin:0 auto 40px"></div><div class="cheat-grid rev" id="cheatBox"></div></div></section>
+
+<footer class="z1" style="border-top:1px solid var(--br2);padding:28px 16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--t3)">AWS DevOps Professional Masterclass · DOP-C02 · <span style="color:var(--o)">All content is production-verified</span></footer>
+
+<div id="modal"><div class="mbox"><button class="mclose" id="mcloseBtn">&#10005;</button><div id="mContent"></div></div></div>
+
+<script>
+// ============================================================
+// DATA — no special chars in strings used as HTML attributes
+// ============================================================
+var CHIPS = ['CodePipeline','CodeBuild','CodeDeploy','CloudFormation','CDK','ECS','EKS','Lambda','CloudWatch','X-Ray','CloudTrail','GuardDuty','Config','IAM','KMS','Secrets Manager','EventBridge','SQS','SNS','Step Functions','Kinesis','Auto Scaling','Route53','Direct Connect','Transit Gateway','SSM','Inspector','Security Hub','Macie','DynamoDB','Aurora','ElastiCache','S3'];
+
+var ROADMAP = [
+  {lv:'lv0',em:'🌱',t:'Beginner',items:['What is DevOps?','AWS Account + IAM basics','EC2 and Security Groups','S3 Buckets + Policies','AWS CLI setup','VPC + Subnets basics','CloudWatch basic metrics','First CodeBuild job']},
+  {lv:'lv1',em:'🚀',t:'Intermediate',items:['CodeCommit + Git flow','CodeDeploy strategies','CodePipeline stages','CloudFormation templates','Auto Scaling Groups','RDS Multi-AZ setup','IAM Roles + Policies deep dive','EventBridge rules']},
+  {lv:'lv2',em:'🔥',t:'Advanced',items:['ECS/EKS + Fargate','Lambda + API Gateway','CDK + StackSets','X-Ray distributed tracing','Multi-account with Orgs','Direct Connect + VPN','Step Functions','Chaos engineering']},
+  {lv:'lv3',em:'⭐',t:'Expert',items:['Multi-region HA design','DR: RTO/RPO patterns','Service Mesh','Compliance automation','Custom Config rules','Cost optimisation','GameDays + Runbooks','Security Hub + CSPM']}
+];
+
+// Each service: id, icon, color, name, cat, simple, pro, when[], tags[], code, exam, labs[]
+var SVCS = {
+  d1:[
+    {id:'codecommit',ico:'💾',col:'#1C2B14',bc:'#3a6a1a',nm:'AWS CodeCommit',cat:'Source Control',
+     si:'Think of CodeCommit like Google Drive but only for code. Every change is tracked forever. Multiple people can work together. You can go back to any version at any time.',
+     pr:'Fully managed Git repositories on AWS. IAM-native access — no SSH keys needed. Integrates with CodePipeline via EventBridge triggers. Approval rule templates enforce PR reviews.',
+     wh:['Private Git repos with IAM access control instead of separate user management','Triggering CodePipeline automatically on push to main branch','Enforcing PR review requirements before merge','Cross-account repository access for large organizations'],
+     tg:['Git','IAM-native','Triggers','Approval Rules'],
+     code:'# 1. Create repository\naws codecommit create-repository \\\n  --repository-name MyApp\n\n# 2. Clone (no SSH needed)\ngit clone codecommit::us-east-1://MyApp\n\n# 3. Push triggers CodePipeline\ngit add . && git commit -m "feat: new feature"\ngit push origin main',
+     ex:'Exam: CodeCommit uses HTTPS GRC helper. Approval rule templates enforce reviews. On push to main, EventBridge triggers CodePipeline automatically within seconds.',
+     lb:['Lab 1: Create repo + IAM policy + clone locally','Lab 2: Set approval rule requiring 2 reviewers before merge']},
+    {id:'codebuild',ico:'🔨',col:'#1C1C0A',bc:'#6b5a1a',nm:'AWS CodeBuild',cat:'Build and Test',
+     si:'CodeBuild is like a magic kitchen. You give it your raw ingredients (code), a recipe (buildspec.yml), and it cooks your meal (compiles, tests) and boxes it up (artifact) ready to deliver. No kitchen to clean — it disappears after each build.',
+     pr:'Fully managed CI service. Isolated Docker containers per build. Pay per minute. Scales to thousands of parallel builds. Access SSM Parameter Store and Secrets Manager for secrets. VPC mode for private resource access.',
+     wh:['Compile code and run unit + integration tests in isolation','Build Docker images and push to ECR tagged with git commit SHA','Run security scans (Trivy for CVEs, Checkov for IaC, SonarQube for code)','Generate deployment artifacts and upload to S3'],
+     tg:['buildspec.yml','Docker','ECR','Artifacts','VPC Mode','Caching'],
+     code:'version: 0.2\nenv:\n  parameter-store:\n    DB_HOST: /myapp/prod/db-host\nphases:\n  install:\n    runtime-versions: {nodejs: 20}\n    commands: [npm ci]\n  build:\n    commands:\n      - npm test\n      - docker build -t $ECR_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION .\n  post_build:\n    commands:\n      - docker push $ECR_URI:$CODEBUILD_RESOLVED_SOURCE_VERSION\nartifacts:\n  files: [imagedefinitions.json]',
+     ex:'Exam: CODEBUILD_RESOLVED_SOURCE_VERSION = git commit SHA — use this for Docker image tags. Enable S3 cache to speed up npm install. VPC config needed to access private RDS during integration tests.',
+     lb:['Lab 3: CodeBuild project — tests + Docker image pushed to ECR','Lab 4: Add Trivy CVE scan — fail build on Critical findings']},
+    {id:'codedeploy',ico:'🚀',col:'#1C0E0E',bc:'#6b2020',nm:'AWS CodeDeploy',cat:'Deployment',
+     si:'Imagine updating an app on 1000 computers without turning any off. CodeDeploy does this automatically — like a careful surgeon updating one patient at a time, checking they are OK, then moving to the next. If anything goes wrong, it undoes everything automatically.',
+     pr:'Automated deployments to EC2, ECS, Lambda, and on-premises. Multiple strategies: All-At-Once (fast, risky), Rolling (gradual), Blue/Green (zero downtime, instant rollback). AppSpec.yml defines lifecycle hooks. Auto-rollback via CloudWatch alarms.',
+     wh:['EC2 fleet updates with zero downtime using rolling or blue/green','ECS Blue/Green via ALB traffic shifting between two task sets','Lambda canary or linear deployments with automatic rollback on alarm','On-premises servers alongside cloud infrastructure'],
+     tg:['Blue/Green','Canary','Rolling','AppSpec.yml','Auto-Rollback','EC2 ECS Lambda'],
+     code:'# appspec.yml for EC2\nversion: 0.0\nos: linux\nfiles:\n  - source: /\n    destination: /var/www/myapp\nhooks:\n  BeforeInstall:\n    - location: scripts/stop_server.sh\n      timeout: 60\n  ValidateService:\n    - location: scripts/health_check.sh\n      timeout: 60',
+     ex:'Exam: All-At-Once = fast but downtime, use only dev. Blue/Green = no downtime, instant rollback. Auto-rollback: add alarm to alarmConfiguration + DEPLOYMENT_STOP_ON_ALARM to autoRollbackConfiguration.',
+     lb:['Lab 5: Blue/Green on EC2 with ALB — deploy, verify, force rollback','Lab 6: Lambda canary deploy + auto-rollback on error alarm']},
+    {id:'codepipeline',ico:'🔗',col:'#0f1a1a',bc:'#1f5a6b',nm:'AWS CodePipeline',cat:'Orchestration',
+     si:'CodePipeline is the conveyor belt at an airport. Your code gets on at check-in (source), goes through security (tests), the departure lounge (staging), and lands at the destination (production). All automatic, all visible.',
+     pr:'Fully managed CD orchestration. Stages contain actions. Parallel actions speed up pipelines. Cross-account deployments via IAM role assumption. Manual approval gates with SNS notifications. V2 pipelines support variables.',
+     wh:['Orchestrating the full release pipeline end to end','Cross-account deployments from Dev to Staging to Production accounts','Requiring human approval before production deployments','Parallel stages to run build and test simultaneously'],
+     tg:['Stages','Actions','Cross-Account','Approvals','Variables','Artifacts'],
+     code:'# Cross-account production deploy stage\n{\n  "name": "Deploy-Production",\n  "actions": [{\n    "provider": "CloudFormation",\n    "roleArn": "arn:aws:iam::PROD:role/deploy",\n    "configuration": {\n      "ActionMode": "CREATE_UPDATE",\n      "StackName": "myapp-prod"\n    }\n  }]\n}',
+     ex:'Exam: Pipeline artifacts stored in S3 between stages. Cross-account: source account assumes role in target account. V2 pipelines support variables like commit ID passed between stages.',
+     lb:['Lab 7: Full pipeline: CodeCommit to CodeBuild to CodeDeploy with approval gate']}
+  ],
+  d2:[
+    {id:'cfn',ico:'📄',col:'#1a140a',bc:'#6b4d1a',nm:'AWS CloudFormation',cat:'Infrastructure as Code',
+     si:'CloudFormation is a blueprint for your AWS infrastructure. You write what you want, give it to CloudFormation, and it builds everything. Want to delete it? One click removes all resources. Want to update? It figures out what changed and only touches those parts.',
+     pr:'Declarative IaC in YAML or JSON. Stack lifecycle management. Change sets preview changes before applying. Drift detection compares actual vs desired state. StackSets deploy across multiple accounts and regions. Stack policies protect stateful resources from accidental updates.',
+     wh:['Provisioning complete environments from a single template','Detecting drift when someone manually changes resources','Safe production updates — review change set before applying','Organization-wide deployments with StackSets'],
+     tg:['YAML','Stacks','StackSets','Drift','Change Sets','Outputs','Exports'],
+     code:'AWSTemplateFormatVersion: "2010-09-09"\nParameters:\n  Environment:\n    Type: String\n    AllowedValues: [dev, staging, prod]\nConditions:\n  IsProd: !Equals [!Ref Environment, prod]\nResources:\n  MyBucket:\n    Type: AWS::S3::Bucket\n    DeletionPolicy: Retain\n    Properties:\n      BucketName: !Sub "myapp-${Environment}"\n      VersioningConfiguration:\n        Status: !If [IsProd, Enabled, Suspended]',
+     ex:'Exam: DeletionPolicy: Retain keeps resource after stack delete. Stack policy prevents updates to RDS/DynamoDB. Nested stacks reuse templates. StackSets need trusted access enabled in Organizations.',
+     lb:['Lab 8: Nested stack — VPC + EC2 + RDS, detect drift by manually changing security group']},
+    {id:'cdk',ico:'⌨️',col:'#0a0f1a',bc:'#1a3a6b',nm:'AWS CDK',cat:'IaC with Code',
+     si:'CDK lets you write your cloud infrastructure using normal code like Python or TypeScript instead of YAML. It is like the difference between writing HTML by hand vs using a framework — same result but much more powerful, reusable, and testable.',
+     pr:'Define AWS infrastructure in TypeScript, Python, Java, Go. Synthesizes to CloudFormation. L1 constructs = direct CFN wrappers. L2 = smart defaults with best practices. L3 = complete patterns like ApplicationLoadBalancedFargateService.',
+     wh:['Teams who prefer code over YAML for infrastructure','Building reusable infrastructure patterns shared as libraries','Applying loops, conditions, functions in infrastructure','Type-safe infra with IDE autocomplete and compile-time checking'],
+     tg:['TypeScript','Python','Constructs L1 L2 L3','cdk synth','cdk deploy'],
+     code:'// L2 construct: ECS Fargate + ALB in 12 lines\nimport * as patterns from "aws-cdk-lib/aws-ecs-patterns";\n\nnew patterns.ApplicationLoadBalancedFargateService(\n  this, "MyService",\n  {\n    cluster,\n    cpu: 256,\n    memoryLimitMiB: 512,\n    taskImageOptions: {\n      image: ContainerImage.fromRegistry("nginx"),\n    },\n    desiredCount: 3,\n  }\n);',
+     ex:'Exam: cdk synth = generates CloudFormation template. cdk deploy = synth + deploy. cdk diff = shows changes before apply. L1 constructs start with Cfn. L2 have smart defaults. L3 are full solutions.',
+     lb:['Lab 9: CDK app in TypeScript — VPC + ECS Fargate + RDS, modify and cdk deploy']},
+    {id:'ssm',ico:'🔧',col:'#1a1a0f',bc:'#5e5a1a',nm:'AWS Systems Manager',cat:'Operations Hub',
+     si:'SSM is a Swiss Army knife for managing servers. No need to open port 22 or use a bastion host. You can run commands across 1000 servers at once, install patches, store configuration secrets, and see what software is installed — all from the console.',
+     pr:'8 capabilities: Session Manager (no SSH needed), Run Command (fleet-wide), Patch Manager (OS patching), Parameter Store (config hierarchy), Automation (runbooks), State Manager (desired state), Inventory (software audit), OpsCenter (incident tracking).',
+     wh:['Secure shell access without bastion hosts or port 22 (Session Manager)','Run the same script across 500 servers filtered by tag (Run Command)','Automated OS patching with maintenance windows (Patch Manager)','Store config values and encrypted secrets in a hierarchy (Parameter Store)'],
+     tg:['Session Manager','Run Command','Patch Manager','Parameter Store','Automation','State Manager'],
+     code:'# No SSH needed - connect via browser or CLI\naws ssm start-session --target i-0123456789\n\n# Run command on all prod servers\naws ssm send-command \\\n  --document-name AWS-RunShellScript \\\n  --targets "Key=tag:Env,Values=prod" \\\n  --parameters commands=["yum update -y"]\n\n# Read encrypted parameter in Lambda\naws ssm get-parameter \\\n  --name /myapp/prod/db-password \\\n  --with-decryption',
+     ex:'Exam: Parameter Store Standard is free (4KB). Advanced costs money but adds TTL and 8KB size. SecureString uses KMS. State Manager enforces desired state continuously — use to ensure CloudWatch agent always installed.',
+     lb:['Lab 10: Remove all SSH from EC2 instances, connect via Session Manager from browser']}
+  ],
+  d3:[
+    {id:'cloudwatch',ico:'📊',col:'#0f0a1a',bc:'#3a1a5e',nm:'Amazon CloudWatch',cat:'Full Observability',
+     si:'CloudWatch is the health monitor display in a hospital. It shows all your vital signs like CPU, memory, and errors. It sets off alarms when something is wrong. It stores every log from every machine so you can search through them later. It even predicts anomalies before they cause problems.',
+     pr:'Unified observability: metrics, logs, alarms, dashboards. Custom metrics via PutMetricData API. Log Insights for SQL-like queries across logs. Composite alarms combine multiple alarms with AND/OR logic. Anomaly detection creates ML-based dynamic thresholds automatically.',
+     wh:['Setting CPU and memory alarms that trigger Auto Scaling actions','Querying application logs across hundreds of Lambda functions','Building NOC dashboards for operations teams','Detecting unusual patterns before they cause user-visible incidents'],
+     tg:['Metrics','Logs Insights','Alarms','Composite Alarms','Dashboards','Synthetics','Anomaly Detection'],
+     code:'# Logs Insights - find 10 slowest API paths\nfields @timestamp, duration, path\n| filter status >= 200\n| stats avg(duration) as avg_ms by path\n| sort avg_ms desc\n| limit 10\n\n# Composite alarm - only alert when BOTH fire\naws cloudwatch put-composite-alarm \\\n  --alarm-name "HighLoad" \\\n  --alarm-rule "ALARM(HighCPU) AND ALARM(HighMemory)"',
+     ex:'Exam: Composite alarms reduce noise significantly. Standard resolution = 1 minute. High resolution custom metrics = 1 second. Missing data treatment matters: breaching vs not-breaching changes alarm behavior. Synthetics = scheduled canary scripts that test your URLs/APIs.',
+     lb:['Lab 11: CloudWatch dashboard + composite alarm + auto-remediation via SSM Automation']},
+    {id:'xray',ico:'🔍',col:'#0a0f1a',bc:'#1a2a5e',nm:'AWS X-Ray',cat:'Distributed Tracing',
+     si:'When your app is slow and you have no idea which part is causing it, X-Ray is like a GPS tracker for each request. You can see exactly where the request went, how long each step took, and where it got stuck. It draws you a map of your whole system automatically.',
+     pr:'Distributed tracing with automatic service maps. Segments represent your service. Subsegments represent downstream calls like database queries. Sampling rules control what percentage of requests are traced to manage cost. X-Ray Analytics for querying and filtering traces.',
+     wh:['Finding which microservice adds the most latency to a request','Tracing requests through Lambda to SQS to Lambda chains','Identifying N+1 database query problems in production','Seeing how errors propagate across distributed services'],
+     tg:['Tracing','Service Map','Segments','Subsegments','Sampling','Analytics'],
+     code:'# Lambda Powertools - instrument automatically\nfrom aws_lambda_powertools import Tracer\ntracer = Tracer(service="payment-service")\n\n@tracer.capture_lambda_handler\ndef handler(event, context):\n    # All downstream calls auto-traced\n    result = table.get_item(Key={"id": "123"})\n    return result\n\n# Custom subsegment for external call\nwith tracer.provider.in_subsegment("stripe-api") as sub:\n    charge = stripe.charge(amount)',
+     ex:'Exam: X-Ray default sampling: 1 req/s + 5% of remainder. Increase via sampling rules. Groups filter traces by conditions. Service map auto-generated. Integrated natively with Lambda, ECS, API Gateway, ALB.',
+     lb:['Lab: X-Ray on API Gateway to Lambda to DynamoDB — find which step is slowest']},
+    {id:'cloudtrail',ico:'📋',col:'#0f1a0f',bc:'#1a4a1a',nm:'AWS CloudTrail',cat:'Audit Trail',
+     si:'CloudTrail is a security camera recording everything that happens in your AWS account. Who logged in? Who deleted that database? Who changed that security group at 2am? CloudTrail recorded it with the exact time, who did it, and where they were. Perfect for security forensics and compliance audits.',
+     pr:'Records all AWS API calls. Management events (control plane) free for first copy. Data events (S3 GetObject, Lambda invoke) cost extra. Immutable S3 storage. CloudTrail Insights detects unusual API call patterns. Org-level trails cover all accounts.',
+     wh:['Compliance: prove every infrastructure change was authorized','Security forensics: reconstruct what happened during an incident','Detecting unusual API calls at odd hours','Meeting SOC2, PCI-DSS, HIPAA audit requirements'],
+     tg:['API Audit','S3','Org Trail','Insights','EventBridge','Athena'],
+     code:'# Find who deleted an S3 bucket in last 7 days\naws cloudtrail lookup-events \\\n  --lookup-attributes \\\n    AttributeKey=EventName,AttributeValue=DeleteBucket \\\n  --start-time 2025-01-01 \\\n  --query "Events[*].{User:Username,Time:EventTime}"',
+     ex:'Exam: Enable log file validation (SHA-256 hash) to prove logs are not tampered with. Data events cost extra — enable only when needed. Insights detects unusual write volumes. Use Athena to query CloudTrail S3 logs at scale.',
+     lb:['Lab: CloudTrail + Athena — query all IAM changes made in the last 30 days']}
+  ],
+  d4:[
+    {id:'iam',ico:'🔐',col:'#1a0f0f',bc:'#6b1a1a',nm:'AWS IAM',cat:'Identity and Access',
+     si:'IAM is the bouncer at every door in AWS. You define exactly who can go through which door and do what inside. If you do not explicitly say yes, the answer is always no. One no anywhere in the chain means blocked forever. This is the most important service to master.',
+     pr:'Policies define Effect/Action/Resource/Condition. Evaluation order: SCP > Resource Policy > Permission Boundary > Identity Policy. Explicit Deny ALWAYS wins over any Allow anywhere. Roles for EC2, Lambda, cross-account. Permission Boundaries cap maximum permissions.',
+     wh:['EC2 instances need S3 access — attach IAM role to instance, never use access keys','Cross-account access — role in Account B, trust policy allows Account A to assume it','Limit developer maximum permissions — Permission Boundaries prevent privilege escalation','Org-wide restrictions like no resources outside eu-west-1 — use Service Control Policies'],
+     tg:['Roles','Policies','SCP','Permission Boundaries','Conditions','STS','AssumeRole'],
+     code:'// CRITICAL: Explicit Deny always wins\n// Evaluation: SCP -> Boundary -> Identity -> Resource\n\n// Deny all if MFA not present\n{\n  "Effect": "Deny",\n  "Action": "*",\n  "Resource": "*",\n  "Condition": {\n    "BoolIfExists": {\n      "aws:MultiFactorAuthPresent": "false"\n    }\n  }\n}',
+     ex:'EXAM CRITICAL: Explicit Deny beats everything. SCP = maximum allowed for entire account. Permission Boundary = max ceiling for a role/user. Resource policy alone grants cross-account access. Both identity AND resource policy needed for same-account access.',
+     lb:['Lab: Permission Boundary — developer can create Lambda but cannot create IAM roles']},
+    {id:'kms',ico:'🔑',col:'#0f0f1a',bc:'#1a1a6b',nm:'AWS KMS',cat:'Encryption Keys',
+     si:'KMS is a bank vault for your encryption keys. Your data gets scrambled with a key locked inside KMS. KMS never gives you the actual key — instead it scrambles your data FOR you when you ask. Only people you explicitly authorize can use the key. Perfect audit trail in CloudTrail.',
+     pr:'Customer Managed Keys give full control over rotation, key policy, and deletion. Automatic yearly rotation. Symmetric AES-256 for data encryption. Asymmetric RSA/ECC for signing. Envelope encryption pattern: CMK encrypts data key, data key encrypts data.',
+     wh:['Encrypting S3 objects, EBS volumes, RDS, DynamoDB with customer-controlled keys','Cross-account encryption by sharing CMK via key policy','Regulatory requirements for annual key rotation','Auditing every key usage in CloudTrail automatically'],
+     tg:['CMK','Key Policy','Rotation','Envelope Encryption','Symmetric','Asymmetric'],
+     code:'# Envelope encryption pattern\n# 1. Generate data key\naws kms generate-data-key \\\n  --key-id alias/my-app-key \\\n  --key-spec AES_256\n# Returns: plaintext key + encrypted key\n\n# 2. Encrypt data with plaintext key (in memory)\n# 3. Store encrypted data + encrypted key together\n# 4. Delete plaintext key from memory\n# To decrypt: call KMS Decrypt on encrypted key',
+     ex:'Exam: Key policy is REQUIRED (unlike IAM where identity policy alone works). Default key policy allows account root to manage. Cross-account access needs key policy update AND identity policy in the other account.',
+     lb:['Lab: Create CMK, encrypt S3 object, verify CloudTrail shows key usage']},
+    {id:'guardduty',ico:'🚨',col:'#1a0a0a',bc:'#6b0f0f',nm:'Amazon GuardDuty',cat:'Threat Detection',
+     si:'GuardDuty is a smart security guard who reads every badge scan, network log, and API call and says that is weird — that EC2 instance is sending data to a server in Russia at 3am and it never did that before. It uses machine learning to spot suspicious patterns that humans would miss.',
+     pr:'ML-powered threat detection. Analyses CloudTrail, VPC Flow Logs, DNS logs, S3 access logs, EKS audit logs. Detects compromised credentials, crypto mining, C2 communication, unusual API calls, data exfiltration. Severity 1-10. Findings in Security Hub.',
+     wh:['Detecting EC2 instance communicating with known malware command-and-control servers','Finding IAM credentials being used from unexpected countries','Spotting S3 data exfiltration by compromised IAM principals','Auto-response: finding triggers EventBridge which calls Lambda to isolate instance'],
+     tg:['ML','VPC Flow Logs','DNS','CloudTrail','S3 Protection','EKS Audit','Findings'],
+     code:'// Auto-response: GuardDuty finding -> isolate EC2\n// EventBridge rule pattern:\n{\n  "source": ["aws.guardduty"],\n  "detail-type": ["GuardDuty Finding"],\n  "detail": {\n    "severity": [{"numeric": [">=", 7]}]\n  }\n}\n// Target: Lambda\n// Action: Move instance to quarantine SG\n//         Detach IAM role\n//         Send SNS alert',
+     ex:'Exam: GuardDuty needs 7-14 days to learn baseline. Findings severity: Low 1-3.9, Medium 4-6.9, High 7-8.9. Multi-account: designate delegated admin. Suppression rules for known false positives. Finding -> EventBridge -> Lambda = auto-response pattern.',
+     lb:['Lab: Enable GuardDuty + simulate finding + EventBridge + Lambda auto-remediation']},
+    {id:'config',ico:'🏛️',col:'#0a1a0a',bc:'#1a5a1a',nm:'AWS Config',cat:'Configuration Compliance',
+     si:'AWS Config takes a photograph of every resource in your account every time it changes. It also lets you write rules that check if the photos match what you want. If something drifts from the right configuration, Config can automatically fix it.',
+     pr:'Records configuration changes for all AWS resources. Config Rules evaluate compliance (managed = AWS-built, custom = Lambda-backed). Conformance Packs bundle rules for standards like CIS or PCI. Auto-remediation via SSM Automation documents. Aggregator for multi-account view.',
+     wh:['Detecting when security groups are opened to 0.0.0.0/0 automatically','Enforcing required tags on all EC2 instances and RDS databases','Auto-remediating non-compliant resources without human intervention','Proving SOC2 or PCI compliance in audits with historical configuration data'],
+     tg:['Config Rules','Conformance Packs','Auto-Remediation','Aggregator','Timeline','SNS'],
+     code:'# Custom Config rule checks if S3 buckets\n# have versioning enabled\n\ndef evaluate_compliance(event, context):\n    s3 = boto3.client("s3")\n    bucket = event["configurationItem"]["resourceName"]\n    resp = s3.get_bucket_versioning(Bucket=bucket)\n    status = resp.get("Status", "")\n    if status == "Enabled":\n        return "COMPLIANT"\n    return "NON_COMPLIANT"',
+     ex:'Exam: Config records configuration history — not real-time monitoring. Use with EventBridge for auto-remediation flow: Config NON_COMPLIANT -> EventBridge -> SSM Automation -> Fix. Conformance Packs have pre-built rule sets for CIS, PCI, NIST.',
+     lb:['Lab: Config rule for public S3 buckets + auto-remediation via SSM Automation']}
+  ],
+  d5:[
+    {id:'eventbridge',ico:'⚡',col:'#1a1a0f',bc:'#5e5a1a',nm:'Amazon EventBridge',cat:'Event Bus',
+     si:'EventBridge is a smart receptionist. When something happens in AWS — your deployment completed, a server stopped, a file was uploaded — EventBridge reads the news and routes it to the right people or systems automatically. You set the rules once, then it works forever without you doing anything.',
+     pr:'Serverless event bus. Default bus for AWS events + custom buses for your app. Event patterns filter events by source, detail-type, and detail fields. Schema registry auto-discovers event structure. EventBridge Scheduler replaces EC2 cron jobs. Pipes for point-to-point with enrichment.',
+     wh:['AWS Config marks resource NON_COMPLIANT -> EventBridge -> SSM fixes it automatically','Schedule cron jobs without any EC2 instances using EventBridge Scheduler','SaaS integration: Datadog or PagerDuty events route to your Lambda functions','Cross-account routing: production events trigger monitoring in a security account'],
+     tg:['Event Bus','Rules','Scheduler','Pipes','Schema Registry','Cross-Account','SaaS'],
+     code:'// Rule: auto-remediate public S3 bucket\n{\n  "source": ["aws.config"],\n  "detail-type": ["Config Rules Compliance Change"],\n  "detail": {\n    "configRuleName": ["s3-bucket-public-read-prohibited"],\n    "newEvaluationResult": {\n      "complianceType": ["NON_COMPLIANT"]\n    }\n  }\n}\n// Target: SSM Automation\n// Document: AWS-DisableS3BucketPublicReadWrite',
+     ex:'Exam: EventBridge is the new name for CloudWatch Events (same service). SaaS event sources only available on EventBridge. Schema registry auto-generates code stubs in TypeScript, Python, Java. Pipes: filter + transform + enrich between source and target.',
+     lb:['Lab: EventBridge rule — EC2 stops -> SNS email + SSM restart automatically']},
+    {id:'sqs',ico:'📬',col:'#0f1a0a',bc:'#2a5e1a',nm:'Amazon SQS',cat:'Message Queue',
+     si:'SQS is a mailbox between two friends. Friend A drops messages in whenever they want. Friend B picks them up when ready. If Friend B is sick for a day, messages wait safely in the queue. Nobody is waiting for each other — they work at their own pace. This is called decoupling.',
+     pr:'Standard queue: at-least-once delivery, best-effort ordering, nearly unlimited throughput. FIFO queue: exactly-once processing, strict ordering, 3000/s with batching. Visibility timeout hides message while processing. DLQ captures messages that fail too many times.',
+     wh:['Decouple services to handle traffic spikes — orders queue absorbs bursts for order processor','Retry logic: message becomes visible again after visibility timeout if Lambda fails','FIFO for financial transactions requiring strict ordering and no duplicates','Lambda trigger with batch processing and partial batch failure for efficiency'],
+     tg:['Standard','FIFO','DLQ','Visibility Timeout','Long Polling','Batch','Lambda Trigger'],
+     code:'# Lambda + SQS - partial batch failure pattern\ndef handler(event, context):\n    failures = []\n    for record in event["Records"]:\n        try:\n            process(record["body"])\n        except Exception:\n            # Only failed messages go back to queue\n            failures.append({\n                "itemIdentifier": record["messageId"]\n            })\n    return {"batchItemFailures": failures}',
+     ex:'Exam: Visibility timeout should be 6x Lambda timeout. Long polling max = 20 seconds (saves cost). FIFO: 300 msg/s without batching, 3000/s with batching. DLQ: set maxReceiveCount to 3-5, alarm on DLQ depth > 0.',
+     lb:['Lab: SQS + Lambda — simulate failures, watch DLQ capture them, alarm on DLQ depth']},
+    {id:'lambda',ico:'⚡',col:'#1a0f1a',bc:'#5e1a5e',nm:'AWS Lambda',cat:'Serverless Functions',
+     si:'Lambda is like a light switch connected to a smart bulb. The bulb is off and costs nothing when it is dark. Someone flips the switch (an event), the bulb turns on instantly, does its job, then turns off again. You only pay for the seconds it was on. No servers, no maintenance, scales automatically.',
+     pr:'Event-driven compute. Supports 13+ runtimes. 128MB to 10GB memory. Max 15 minutes per invocation. Scales from 0 to 10,000 concurrent automatically. Layers for shared code. Container images up to 10GB. Destinations route async results to success/failure queues.',
+     wh:['API backends triggered by API Gateway — classic REST API pattern','Processing events from S3, DynamoDB Streams, SQS, SNS, EventBridge','Scheduled maintenance and automation tasks without any servers','Custom CloudFormation resources for services CloudFormation does not support'],
+     tg:['Concurrency','Layers','Destinations','Provisioned Concurrency','Container Images','EventSourceMapping'],
+     code:'# Provisioned Concurrency - eliminate cold starts\naws lambda put-provisioned-concurrency-config \\\n  --function-name my-api \\\n  --qualifier prod \\\n  --provisioned-concurrent-executions 100\n\n# Destinations - route async results\naws lambda put-function-event-invoke-config \\\n  --function-name my-fn \\\n  --destination-config \\\n    "OnSuccess={Destination=arn:sqs:success}",\n    "OnFailure={Destination=arn:sqs:dlq}"',
+     ex:'Exam: 1000 concurrent executions per region (soft limit). Cold start: 100ms to 5s. Provisioned Concurrency eliminates cold starts at a cost. Reserved Concurrency limits maximum and guarantees capacity. Destinations for async — DLQ for sync failures.',
+     lb:['Lab: Lambda + API Gateway + DynamoDB — build serverless API with X-Ray tracing']}
+  ],
+  d6:[
+    {id:'asg',ico:'📈',col:'#1a0f0a',bc:'#6b3a1a',nm:'Auto Scaling Groups',cat:'Compute Scaling',
+     si:'ASG is like a restaurant that hires more waiters when it gets busy and lets some go home when it is quiet. Your EC2 instances are the waiters. ASG automatically adds more when CPU is high and removes them when it drops. If an instance dies, ASG replaces it automatically with a healthy one.',
+     pr:'Policies: Target Tracking (maintain metric at target — simplest), Step (scale by different amounts based on alarm breach size), Scheduled (scale at specific times), Predictive (ML-based forecast scales in advance). Instance refresh for zero-downtime AMI updates.',
+     wh:['CPU over 70% consistently — Target Tracking policy maintains it at 50% automatically','Known busy times like 9am to 6pm business hours — Scheduled scaling','Unpredictable spike traffic — Step scaling with aggressive scale-out increments','Cost optimization — mix On-Demand and Spot instances in the same ASG'],
+     tg:['Target Tracking','Step Scaling','Scheduled','Predictive','Spot','Instance Refresh','Health Checks'],
+     code:'# Target Tracking - keep CPU at 50%\naws autoscaling put-scaling-policy \\\n  --auto-scaling-group-name MyASG \\\n  --policy-name cpu-50-percent \\\n  --policy-type TargetTrackingScaling \\\n  --target-tracking-configuration "{\n    \\"PredefinedMetricSpecification\\":{\n      \\"PredefinedMetricType\\":\\"ASGAverageCPUUtilization\\"\n    },\n    \\"TargetValue\\":50.0,\n    \\"ScaleInCooldown\\":300,\n    \\"ScaleOutCooldown\\":60\n  }"',
+     ex:'Exam: Cooldown period (default 300s) prevents thrashing. Scale-out uses 60s, scale-in uses 300s. Target Tracking auto-creates CloudWatch alarms — do not modify them manually. Instance refresh replaces instances rolling using your existing scaling configuration.',
+     lb:['Lab 12: ASG + Target Tracking + stress test — watch scale out then scale in']},
+    {id:'elb',ico:'⚖️',col:'#0a0f1a',bc:'#1a2a6b',nm:'Elastic Load Balancing',cat:'Traffic Distribution',
+     si:'ELB is the headwaiter in a restaurant. When you arrive, they direct you to a table with space. If a waiter calls in sick, they stop sending customers to that section. Three types: ALB for web apps, NLB for ultra-fast connections, GWLB for routing traffic through firewalls.',
+     pr:'ALB: Layer 7, path/host/header/query routing, WebSockets, Lambda targets, weighted target groups. NLB: Layer 4, static IP addresses, UDP support, ultra-low latency, preserves source IP. GWLB: Layer 3, routes traffic inline through security appliances.',
+     wh:['Web app or API with path-based routing to different microservices — use ALB','Static IP required for partner IP whitelisting or UDP protocol — use NLB','Route traffic through firewall, IDS, or IPS before it reaches your app — use GWLB','Deregistration delay ensures in-flight requests complete during scale-in events'],
+     tg:['ALB','NLB','GWLB','Path Routing','Weighted TG','Health Checks','Sticky Sessions'],
+     code:'# ALB weighted target groups for canary\n# CloudFormation snippet\nForwardConfig:\n  TargetGroups:\n    - TargetGroupArn: !Ref TGStable\n      Weight: 90    # 90% to current version\n    - TargetGroupArn: !Ref TGCanary\n      Weight: 10    # 10% to new version\n\n# Monitor error rate - if OK, shift to 100%',
+     ex:'Exam: ALB has no static IP — use Global Accelerator if you need one. NLB preserves source IP natively. GWLB uses GENEVE protocol on port 6081. Deregistration delay (default 300s) = time for in-flight requests to complete before instance is removed.',
+     lb:['Lab 13: ALB weighted routing for canary deploy, monitor error rate, shift 100%']},
+    {id:'route53',ico:'🌐',col:'#0f1a0a',bc:'#2a5e0a',nm:'Amazon Route53',cat:'DNS and Traffic',
+     si:'Route53 is the worlds phonebook for your website. When someone types myapp.com, Route53 translates that into your server address. Smart Route53 can also say this user is in Europe so send them to the European server, or that server is broken so use this backup one instead.',
+     pr:'DNS service with health checks and traffic routing policies. Latency for performance. Weighted for canary releases. Geolocation for data sovereignty. Failover for DR. Geoproximity with bias for traffic shifting. DNSSEC. Private hosted zones for VPC-internal DNS.',
+     wh:['Multi-region active-active — Latency routing sends users to nearest healthy region','Active-Passive DR — Failover routing with health check triggers DNS cutover','Canary release — Weighted routing sends 10% to new version, 90% to stable','Data sovereignty — Geolocation routing keeps EU users on EU servers always'],
+     tg:['Latency','Failover','Weighted','Geolocation','Geoproximity','Health Checks','Private Zones'],
+     code:'# Failover: primary fails -> switch to backup\naws route53 change-resource-record-sets \\\n  --hosted-zone-id Z123 \\\n  --change-batch "{\n    \\"Changes\\": [{\n      \\"Action\\": \\"UPSERT\\",\n      \\"ResourceRecordSet\\": {\n        \\"Name\\": \\"api.myapp.com\\",\n        \\"Type\\": \\"A\\",\n        \\"Failover\\": \\"PRIMARY\\",\n        \\"HealthCheckId\\": \\"hc-12345\\"\n      }\n    }]\n  }"',
+     ex:'Exam: Health checks: HTTP, HTTPS, TCP. Alias records are free and have no TTL. Non-alias records cost per query. Calculated health check combines multiple health checks. Failover TTL should be low (60s) for fast DNS propagation during DR.',
+     lb:['Lab 14: Route53 failover — primary ELB fails, traffic switches to DR region automatically']},
+    {id:'dr',ico:'🛡️',col:'#0f0f1a',bc:'#1a1a6b',nm:'DR and AWS Backup',cat:'Disaster Recovery',
+     si:'Disaster Recovery is planning what happens when everything breaks. Think of it like a fire drill for your entire cloud. You define how long you can be down (RTO) and how much data you can lose (RPO), then build a backup system that meets those targets. AWS Backup is the toolbox for this.',
+     pr:'AWS Backup: centralized backup for EC2, RDS, EBS, EFS, DynamoDB, FSx. Vault Lock creates WORM immutable backups. DR strategies: Backup/Restore (cheapest, slowest), Pilot Light (minimal running), Warm Standby (scaled-down running), Multi-Site Active/Active (zero downtime).',
+     wh:['RTO hours RPO hours and lowest cost — use Backup and Restore strategy','RTO 15 min RPO 1 min — use Warm Standby with RDS read replica promoted on failover','RTO near zero RPO near zero — use Multi-Site Active/Active with DynamoDB Global Tables','Ransomware protection — use Vault Lock for immutable backups that cannot be deleted'],
+     tg:['RTO','RPO','Backup Vault','Vault Lock','WORM','Cross-Region','Pilot Light','Warm Standby'],
+     code:'# DR Strategy Comparison\n# Backup/Restore: RTO=hours, RPO=hours, Cost=low\n# Pilot Light:   RTO=30min, RPO=minutes, Cost=medium\n# Warm Standby: RTO=minutes, RPO=seconds, Cost=high\n# Active/Active: RTO=0, RPO=0, Cost=2x\n\n# Aurora Global DB - best warm standby\n# Primary region + 1+ secondary regions\n# RPO < 1 second\n# RTO < 1 minute (promote secondary)\naws rds create-global-cluster --global-cluster-identifier my-global',
+     ex:'Exam: Know the 4 DR strategies and their RTO/RPO tradeoffs. Pilot Light = minimal DB running. Warm Standby = scaled-down full environment. Aurora Global DB = < 1s RPO. DynamoDB Global Tables = active-active, < 1s replication.',
+     lb:['Lab 15: Set up Route53 failover + warm standby — simulate region failure, auto-failover']}
+  ]
+};
+
+// Pipeline data
+var PIPE_DATA = {
+  cicd:{
+    nm:'Full CI/CD',
+    stages:[
+      {n:'Source',ico:'📁',svc:'CodeCommit'},
+      {n:'Build',ico:'🔨',svc:'CodeBuild'},
+      {n:'Security',ico:'🔍',svc:'Inspector'},
+      {n:'Staging',ico:'🎭',svc:'CodeDeploy'},
+      {n:'Approve',ico:'✋',svc:'Manual Gate'},
+      {n:'Production',ico:'🚀',svc:'CodeDeploy'}
+    ],
+    logs:[
+      {t:'0:01',c:'ls',m:'[PIPELINE] Execution started -> ID: cp-a1b2c3d4'},
+      {t:'0:02',c:'li',m:'[SOURCE] Detecting change in CodeCommit: main branch'},
+      {t:'0:03',c:'lo',m:'[SOURCE] OK Commit: 7a3f91c - feat: payment service v2'},
+      {t:'0:05',c:'ls',m:'[BUILD] Starting CodeBuild: PaymentService-Build'},
+      {t:'0:08',c:'lc',m:'[BUILD] $ npm ci && npm test -- --coverage'},
+      {t:'0:16',c:'lo',m:'[BUILD] OK 203 tests passed | Coverage 84% | 0 failed'},
+      {t:'0:18',c:'lc',m:'[BUILD] $ docker build -t ecr.amazonaws.com/app:7a3f91c .'},
+      {t:'0:24',c:'lo',m:'[BUILD] OK Image pushed to ECR: app:7a3f91c'},
+      {t:'0:25',c:'ls',m:'[SECURITY] Inspector scanning ECR image for CVEs...'},
+      {t:'0:30',c:'lw',m:'[SECURITY] WARN: 2 Medium CVEs in base image - non-blocking'},
+      {t:'0:31',c:'lo',m:'[SECURITY] OK No Critical/High CVEs - proceeding'},
+      {t:'0:32',c:'ls',m:'[STAGING] Blue/Green deploy to ECS staging cluster'},
+      {t:'0:40',c:'lo',m:'[STAGING] OK 3/3 targets healthy | Error rate: 0.001%'},
+      {t:'0:41',c:'lw',m:'[APPROVE] PAUSED - waiting for manual approval'},
+      {t:'1:02',c:'lo',m:'[APPROVE] OK Approved by: sarah@company.com'},
+      {t:'1:03',c:'ls',m:'[PRODUCTION] Initiating Blue/Green on PRODUCTION cluster'},
+      {t:'1:05',c:'li',m:'[PRODUCTION] Canary: routing 10% traffic to new version'},
+      {t:'1:07',c:'li',m:'[PRODUCTION] CloudWatch check: error_rate=0.001% OK'},
+      {t:'1:09',c:'li',m:'[PRODUCTION] Shifting 100% traffic to new version'},
+      {t:'1:14',c:'lo',m:'[PRODUCTION] OK Old task set terminated after retention'},
+      {t:'1:15',c:'lo',m:'PIPELINE COMPLETE - Duration: 1m 15s | Success'}
+    ],
+    explain:[
+      {n:'Source',t:'CodeCommit push triggers pipeline',d:'Developer pushes to main branch. EventBridge detects the push within seconds and triggers CodePipeline automatically. The commit SHA becomes the artifact version tracked through every subsequent stage.'},
+      {n:'Build',t:'CodeBuild compiles, tests, packages',d:'Runs in an isolated Docker container. Downloads dependencies, executes 203 unit tests, builds Docker image, pushes to ECR tagged with the git commit SHA. Build fails immediately if any test fails.'},
+      {n:'Security',t:'Inspector scans Docker image for CVEs',d:'Every OS package and runtime library checked against the CVE database. Policy: fail on Critical or High, warn on Medium or Low. This happens before ANY deployment — security shift left.'},
+      {n:'Staging',t:'Blue/Green deploy to staging via CodeDeploy',d:'Creates new ECS task set running alongside current one. ALB shifts 100% traffic to the new tasks. Old tasks terminate after health checks pass. Identical process to production — staging is the rehearsal.'},
+      {n:'Approve',t:'Human reviews staging before production',d:'SNS notification goes to the lead engineer. They check staging in CloudWatch, verify error rates are normal, then approve in the console. Pipeline times out in 7 days if no action.'},
+      {n:'Production',t:'Canary Blue/Green on production',d:'10% canary traffic first. CloudWatch monitors error rate for 5 minutes. If alarm fires — automatic rollback to previous version instantly. If healthy — 100% shift. Old environment kept 1 hour for manual rollback option.'}
+    ]
+  },
+  serverless:{
+    nm:'Serverless SAM',
+    stages:[
+      {n:'Source',ico:'📁',svc:'GitHub'},
+      {n:'SAM Build',ico:'📦',svc:'CodeBuild'},
+      {n:'Tests',ico:'🧪',svc:'CodeBuild'},
+      {n:'Staging',ico:'🎭',svc:'SAM Deploy'},
+      {n:'Production',ico:'🚀',svc:'CodeDeploy'}
+    ],
+    logs:[
+      {t:'0:01',c:'ls',m:'[PIPELINE] GitHub push triggers CodePipeline via OIDC'},
+      {t:'0:03',c:'lo',m:'[SOURCE] OK Push to main: fix: reduce Lambda cold start'},
+      {t:'0:05',c:'ls',m:'[BUILD] sam build --use-container'},
+      {t:'0:12',c:'lo',m:'[BUILD] OK 3 Lambda functions built in Lambda runtime container'},
+      {t:'0:14',c:'ls',m:'[TEST] sam local invoke running 45 integration tests'},
+      {t:'0:19',c:'lo',m:'[TEST] OK All 45 tests passed'},
+      {t:'0:21',c:'ls',m:'[STAGING] sam deploy --stack-name myapp-staging'},
+      {t:'0:27',c:'lo',m:'[STAGING] OK Lambda:payment updated - version 47 published'},
+      {t:'0:28',c:'ls',m:'[PROD] CodeDeploy: LambdaCanary10Percent5Minutes'},
+      {t:'0:30',c:'li',m:'[PROD] 10% traffic -> Lambda version 47'},
+      {t:'0:35',c:'li',m:'[PROD] CloudWatch: 0 errors in 5 minute window'},
+      {t:'0:36',c:'lo',m:'[PROD] OK 100% traffic shifted to version 47'},
+      {t:'0:37',c:'lo',m:'SERVERLESS PIPELINE COMPLETE - 37 seconds'}
+    ],
+    explain:[
+      {n:'Source',t:'GitHub push via OIDC, no access keys stored',d:'Uses GitHub OIDC provider to assume an IAM role. No long-lived credentials stored in GitHub. Full audit trail shows exactly which GitHub Action triggered which pipeline run. Secure by design.'},
+      {n:'SAM Build',t:'Lambda functions compiled in Lambda runtime',d:'sam build uses the actual Lambda Docker runtime image to compile your code. This ensures exact parity with production runtime. Python dependencies compiled in Amazon Linux, not your local machine.'},
+      {n:'Tests',t:'Integration tests against local Lambda',d:'sam local invoke runs your Lambda functions locally using Docker. Tests hit a real DynamoDB test table. 45 integration tests verify actual business logic before any deployment occurs.'},
+      {n:'Staging',t:'CloudFormation stack updated with new Lambda',d:'sam deploy creates or updates a CloudFormation stack. Lambda function published to a new version. Alias updated to point to new version. API Gateway stage points to alias.'},
+      {n:'Production',t:'Canary deployment with automatic rollback',d:'LambdaCanary10Percent5Minutes shifts 10% of traffic to new Lambda version. CloudWatch monitors errors and throttles for 5 minutes. Auto-rollback if any alarm fires. Then 100% shift if all healthy.'}
+    ]
+  },
+  terraform:{
+    nm:'GitOps Terraform',
+    stages:[
+      {n:'PR Check',ico:'🔍',svc:'TF Plan'},
+      {n:'Merge',ico:'🔀',svc:'GitHub'},
+      {n:'Plan',ico:'📋',svc:'CodeBuild'},
+      {n:'Approve',ico:'✋',svc:'Manual Gate'},
+      {n:'Apply',ico:'⚙️',svc:'CodeBuild'},
+      {n:'Drift',ico:'🔎',svc:'Scheduled'}
+    ],
+    logs:[
+      {t:'0:01',c:'ls',m:'[PR] #142 opened: upgrade RDS db.r6g.large to db.r6g.xlarge'},
+      {t:'0:03',c:'ls',m:'[PLAN-PR] terraform plan running against staging state...'},
+      {t:'0:09',c:'li',m:'[PLAN-PR] Plan: 1 to change, 0 to add, 0 to destroy'},
+      {t:'0:10',c:'lw',m:'[PLAN-PR] WARN: RDS modify requires brief restart'},
+      {t:'0:25',c:'lo',m:'[MERGE] OK PR approved by 2 reviewers and merged to main'},
+      {t:'0:27',c:'ls',m:'[PLAN] terraform init && terraform plan -out=tfplan'},
+      {t:'0:35',c:'lo',m:'[PLAN] OK Plan saved - posting diff to approval step'},
+      {t:'0:51',c:'lo',m:'[APPROVE] OK Plan approved by infra-team lead'},
+      {t:'0:52',c:'ls',m:'[APPLY] terraform apply -auto-approve tfplan'},
+      {t:'1:04',c:'lo',m:'[APPLY] OK Apply complete! RDS instance type modified'},
+      {t:'1:05',c:'li',m:'[DRIFT] Drift check scheduled in 6 hours via EventBridge'},
+      {t:'1:06',c:'lo',m:'TERRAFORM GITOPS COMPLETE - 247 resources managed'}
+    ],
+    explain:[
+      {n:'PR Check',t:'terraform plan runs on every pull request',d:'CodeBuild runs terraform plan against current state. The plan output showing exact changes is posted as a PR comment. Engineers review what will actually change before any code is merged. No surprises.'},
+      {n:'Merge',t:'PR requires 2 approvals and plan review',d:'Branch protection: 2 reviewer approvals minimum, CI must pass. Merging to main is the production deployment trigger. Full git history is the complete audit trail of all infrastructure changes.'},
+      {n:'Plan',t:'Definitive plan against production state',d:'terraform plan against S3 backend state with DynamoDB locking. Plan saved as pipeline artifact. Human-readable diff posted for review. State lock prevents concurrent modifications during this phase.'},
+      {n:'Approve',t:'Human reviews exact changes before apply',d:'Engineer sees exactly which resources change, whether changes are in-place or destructive, and any unexpected changes. Can reject and revert. This is the final safety gate before production changes.'},
+      {n:'Apply',t:'terraform apply with the approved plan file',d:'terraform apply -auto-approve tfplan uses exactly the plan that was reviewed. Cannot drift from what was approved. DynamoDB lock prevents parallel applies. State updated atomically.'},
+      {n:'Drift',t:'Scheduled drift detection every 6 hours',d:'EventBridge Scheduler triggers terraform plan daily. If anyone manually changed infrastructure, terraform plan shows unexpected changes. CloudWatch alarm fires and team investigates.'}
+    ]
+  }
+};
+
+// Labs data
+var LABS = [
+  {ico:'🏗️',t:'Lab 1: Your First CodeCommit Repository',b:'Beginner · 20 min',
+   obj:'Create a CodeCommit repo, configure IAM permissions, clone locally, and enforce PR approval rules.',
+   steps:[
+     {t:'Create the repository',d:'Run: <code>aws codecommit create-repository --repository-name MyFirstApp</code>. Note the cloneUrlHttp in the output.'},
+     {t:'Create IAM policy',d:'Policy allowing <code>codecommit:GitPull</code> and <code>codecommit:GitPush</code> only on MyFirstApp. Attach to your user.'},
+     {t:'Install GRC and clone',d:'Run <code>pip install git-remote-codecommit</code> then <code>git clone codecommit::us-east-1://MyFirstApp</code>'},
+     {t:'Create approval rule',d:'Console: CodeCommit → Approval rule templates → Create. Set numberOfApprovalsNeeded=2. Associate with MyFirstApp.'},
+     {t:'Test the protection',d:'Create a branch, push a change, open a PR. Verify merge is blocked without 2 approvals.'}
+   ],
+   checks:['Repository clones successfully locally','PR merge blocked without 2 approvals','CloudTrail shows GitPush API call with your username']},
+  {ico:'🔨',t:'Lab 2: CodeBuild — Tests + Docker + ECR',b:'Intermediate · 45 min',
+   obj:'Create a CodeBuild project that runs tests, builds a Docker image, and pushes it to ECR tagged with the git commit SHA.',
+   steps:[
+     {t:'Create ECR repository',d:'<code>aws ecr create-repository --repository-name myapp</code>. Save the repository URI.'},
+     {t:'Create CodeBuild IAM role',d:'Role needs: AmazonECRFullAccess, AmazonSSMReadOnlyAccess, CloudWatchLogsFullAccess. Trust: codebuild.amazonaws.com'},
+     {t:'Write buildspec.yml',d:'Create buildspec.yml with phases: install (npm ci), build (npm test and docker build), post_build (docker push with $CODEBUILD_RESOLVED_SOURCE_VERSION).'},
+     {t:'Create CodeBuild project',d:'Source: CodeCommit/MyFirstApp/main. Environment: managed image standard:7.0, privileged=true for Docker. Env var: ECR_URI=your-repo-uri.'},
+     {t:'Run and verify',d:'Start build. Check CloudWatch Logs for output. Check ECR — image should appear tagged with git commit SHA.'}
+   ],
+   checks:['Build succeeds with all tests passing','ECR shows image tagged with full git commit SHA','CloudWatch Logs shows complete build output with timing']},
+  {ico:'🚀',t:'Lab 3: Blue/Green Deployment with Auto-Rollback',b:'Intermediate · 60 min',
+   obj:'Deploy to ECS with Blue/Green strategy. Simulate a bad deployment and watch the CloudWatch alarm trigger automatic rollback.',
+   steps:[
+     {t:'Create ECS cluster and service',d:'Create Fargate cluster, task definition with nginx:stable, service with ALB. Verify health checks pass on port 80.'},
+     {t:'Configure CodeDeploy',d:'Create CodeDeploy Application (ECS platform). Deployment Group: ECS service, ALB listener, two target groups, auto-rollback on alarm.'},
+     {t:'Create CloudWatch alarm',d:'Alarm on ALB HTTPCode_Target_5XX_Count greater than 10 for 1 minute. Associate with CodeDeploy deployment group.'},
+     {t:'Deploy healthy version',d:'Create deployment with nginx:alpine. Watch Blue/Green swap in CodeDeploy console. Verify zero dropped requests.'},
+     {t:'Test rollback',d:'Deploy a broken image. Watch: alarm fires, CodeDeploy detects it, automatically rolls back to previous version. Total time under 2 minutes.'}
+   ],
+   checks:['Blue/Green swap completes with zero dropped connections','Alarm triggers automatic rollback within 2 minutes','Previous version restored and serving traffic']},
+  {ico:'📊',t:'Lab 4: CloudWatch Observability Setup',b:'Intermediate · 45 min',
+   obj:'Build complete observability: custom metrics, Log Insights query saved, composite alarm, and auto-remediation action.',
+   steps:[
+     {t:'Enable detailed monitoring',d:'Enable 1-minute metrics on your EC2 or ECS service instead of 5-minute default.'},
+     {t:'Create metric filter',d:'On your log group, create a metric filter counting lines containing ERROR. This creates a CloudWatch metric called ErrorCount.'},
+     {t:'Build Log Insights query',d:'Query: fields @timestamp, @message | filter @message like /ERROR/ | stats count() by bin(5m) | sort bin. Save as a saved query.'},
+     {t:'Create composite alarm',d:'Alarm A: CPU greater than 80%. Alarm B: ErrorCount greater than 100. Composite: ALARM(A) AND ALARM(B). SNS notification.'},
+     {t:'Add auto-remediation',d:'EventBridge rule: composite alarm ALARM state triggers SSM Run Command to restart the application. Test by spiking both metrics.'}
+   ],
+   checks:['Composite alarm only fires when both conditions are true simultaneously','Auto-remediation restarts service within 2 minutes of alarm','Dashboard shows all metrics in one view']},
+  {ico:'🔐',t:'Lab 5: IAM Permission Boundaries',b:'Advanced · 30 min',
+   obj:'Create a developer IAM role with a Permission Boundary preventing privilege escalation even with broad permissions.',
+   steps:[
+     {t:'Create Permission Boundary policy',d:'Policy allows: lambda:*, s3:GetObject, logs:*. Explicitly DENIES: iam:*, sts:AssumeRole, organizations:*.'},
+     {t:'Create developer role',d:'Attach AdministratorAccess as identity policy. Also attach the Permission Boundary. Boundary caps the effective permissions.'},
+     {t:'Assume the role and test',d:'<code>aws sts assume-role --role-arn arn:...developer-role</code>. With these temp credentials, try creating IAM user — should fail.'},
+     {t:'Verify Lambda works',d:'Try creating a Lambda function with the same credentials. Should succeed because boundary allows lambda:*.'},
+     {t:'Confirm with Policy Simulator',d:'Use IAM Policy Simulator with the role. Verify iam:CreateUser = Denied and lambda:CreateFunction = Allowed.'}
+   ],
+   checks:['Developer can create and update Lambda functions','Developer cannot create IAM users or roles even with AdministratorAccess','IAM Policy Simulator confirms boundary enforcement']}
+];
+
+// Debug scenarios
+var BUGS = [
+  {tp:'e',ico:'🚨',t:'ECS Task: CannotPullContainerError',svc:'Amazon ECS Fargate',
+   err:'ResourceInitializationError: unable to pull secrets or registry auth: execution resource retrieval failed: unable to retrieve ecr registry auth: RequestError: send request failed',
+   why:'Fargate tasks in private subnets cannot reach ECR unless you have either a NAT Gateway with internet access OR VPC Endpoints for ECR. No route to ECR = cannot pull images at all.',
+   steps:[
+     'Check subnet routing table — does it have a route for 0.0.0.0/0 pointing to a NAT Gateway?',
+     'Alternative: create VPC Endpoints for com.amazonaws.region.ecr.api, ecr.dkr, s3, and logs',
+     'Verify Task Execution Role has AmazonECRFullAccess or at minimum ecr:GetAuthorizationToken and ecr:BatchGetImage',
+     'Security Group outbound rules must allow port 443 to 0.0.0.0/0 or to the VPC Endpoint security group',
+     'Check exact error: <code>aws ecs describe-tasks --cluster CLUSTER --tasks TASK_ARN --query "tasks[].stoppedReason"</code>']},
+  {tp:'e',ico:'🔴',t:'CloudFormation: UPDATE_ROLLBACK_FAILED',svc:'AWS CloudFormation',
+   err:'Stack cannot be updated or deleted because it is in UPDATE_ROLLBACK_FAILED state. One or more resources could not be rolled back.',
+   why:'A resource was changed or deleted manually outside CloudFormation between the failed update and the rollback attempt. CloudFormation cannot restore what is no longer there.',
+   steps:[
+     'Go to Stack Events tab. Find the resource marked UPDATE_ROLLBACK_FAILED. Note the Logical Resource ID.',
+     'Check if that resource still exists in AWS console. If manually deleted, recreate it with the same name.',
+     'Run: <code>aws cloudformation continue-update-rollback --stack-name MyStack</code>',
+     'If resource cannot be restored, skip it: add <code>--resources-to-skip LogicalResourceId</code> to the command',
+     'After rollback completes, the skipped resource is detached from the stack. Import or recreate as needed.']},
+  {tp:'w',ico:'⚠️',t:'SQS: Messages Processed Multiple Times',svc:'Lambda + SQS',
+   err:'Lambda function completes successfully, no errors in logs, but database shows duplicate writes. Messages appear processed multiple times.',
+   why:'SQS Visibility Timeout is shorter than Lambda execution time. When Lambda runs longer than the timeout, SQS makes the message visible again and another Lambda picks it up. Both succeed. Duplicate processing.',
+   steps:[
+     'Check SQS queue VisibilityTimeout setting in console. Note the value in seconds.',
+     'Check Lambda average execution time in CloudWatch: Metrics > Lambda > Duration > p99.',
+     'Fix: set VisibilityTimeout to at least 6 times Lambda p99 duration. If Lambda p99 = 30s, set to 180s.',
+     'Enable ReportBatchItemFailures in Lambda event source mapping. Return <code>batchItemFailures</code> in response.',
+     'For critical systems, implement idempotency: store processed messageId in DynamoDB with TTL before processing.']},
+  {tp:'e',ico:'🚨',t:'Terraform: State Lock Stuck',svc:'Terraform + DynamoDB',
+   err:'Error: Error acquiring the state lock. ConditionalCheckFailedException: The conditional request failed.',
+   why:'Previous terraform run crashed or was killed without releasing the DynamoDB lock. The lock record still exists and blocks all subsequent runs.',
+   steps:[
+     'Verify no active terraform operation is running anywhere — check all CI/CD runners and local machines.',
+     'Check who holds the lock: <code>aws dynamodb get-item --table-name terraform-locks --key \'{\"LockID\":{\"S\":\"bucket/path.tfstate\"}}\'</code>',
+     'If the process is confirmed dead, force unlock: <code>terraform force-unlock LOCK-ID</code>',
+     'WARNING: Never force-unlock while another apply is genuinely running — state corruption will occur.',
+     'Prevention: add TTL attribute to DynamoDB lock table so stale locks auto-expire after 1 hour.']},
+  {tp:'w',ico:'⚠️',t:'CodeDeploy: Health Check Timeout',svc:'AWS CodeDeploy',
+   err:'Deployment failed: The overall deployment failed because too many instances failed deployment. Load balancer health check failed for replacement environment.',
+   why:'New ECS tasks or EC2 instances are not passing ALB health checks. Common causes: wrong health check path returning 404, app crash on startup, OOMKilled, or insufficient startup time.',
+   steps:[
+     'Check ECS stopped tasks: <code>aws ecs describe-tasks --cluster prod --tasks TASK_ARN</code> and look at stoppedReason',
+     'Exit code 137 means OOMKilled — increase memory in task definition',
+     'Exit code 1 means app crash — check CloudWatch Logs for the error on startup',
+     'Verify ALB Target Group health check path returns 200. Check it is not redirecting (302) which fails health checks.',
+     'Increase health check grace period in CodeDeploy deployment group if app has slow startup like JVM warmup.']}
+];
+
+// Quiz
+var QUIZ = [
+  {n:1,dom:'SDLC Automation',dif:'🔴 Hard',
+   q:'A CodeDeploy deployment failed after shifting 20% traffic. Error rate spiked to 8%. autoRollbackConfiguration has DEPLOYMENT_FAILURE event enabled. Rollback did NOT trigger. What is the most likely reason?',
+   opts:['CloudWatch alarm not added to alarmConfiguration — alarm rollback requires DEPLOYMENT_STOP_ON_ALARM event plus alarm in alarmConfiguration, not DEPLOYMENT_FAILURE','Auto-rollback only works for EC2 not ECS deployments','DEPLOYMENT_FAILURE only triggers rollback at 100% traffic shift','ECS Blue/Green does not support auto-rollback'],
+   ans:0,exp:'DEPLOYMENT_FAILURE triggers rollback when CodeDeploy itself detects a failure in its own process (hooks fail, instances fail to register). For metric-based rollback (like error rate), you need: 1) CloudWatch alarm, 2) alarm added to alarmConfiguration, 3) DEPLOYMENT_STOP_ON_ALARM in autoRollbackConfiguration.'},
+  {n:2,dom:'IaC',dif:'🟡 Medium',
+   q:'A CloudFormation stack manages a production RDS database. A developer runs delete-stack on production. Which feature would have PREVENTED the RDS from being deleted?',
+   opts:['Termination protection on the stack','DeletionPolicy: Retain on the RDS resource in the template','Stack policy with Deny on RDS logical resource','RDS automated backup policy'],
+   ans:1,exp:'DeletionPolicy: Retain on a specific resource means CloudFormation will NOT delete that resource even when the stack is deleted. The stack deletes successfully but the RDS remains untouched. Termination protection prevents stack deletion but can be removed by anyone with sufficient permissions.'},
+  {n:3,dom:'Security',dif:'🔴 Hard',
+   q:'Account has AdministratorAccess IAM policy on a role. An SCP on the OU explicitly denies S3:DeleteBucket. The S3 bucket has a resource policy ALLOWING this role to call DeleteBucket. Can they delete the bucket?',
+   opts:['Yes — resource policy explicitly allows it and overrides SCP','No — SCP Deny overrides everything including bucket resource policies','Yes — AdministratorAccess supersedes SCP for within-account actions','No — but the identity policy can override the SCP if broad enough'],
+   ans:1,exp:'SCPs define the MAXIMUM permissions for an entire AWS account. Even if the bucket resource policy says Allow and the identity policy says Allow, an SCP Deny is absolute. SCPs restrict what is even possible in the account regardless of what any individual policy says. SCP Deny cannot be overridden by any combination of resource or identity policies.'},
+  {n:4,dom:'HA and DR',dif:'🔴 Hard',
+   q:'Company needs RTO of 10 minutes and RPO of 1 minute for production. Which architecture meets BOTH requirements at LOWEST cost?',
+   opts:['Multi-Site Active/Active with two full-scale environments in two regions','Warm Standby: scaled-down replica in DR region with RDS read replica and Route53 failover','Pilot Light: minimal RDS instance in DR, restore from snapshot on failover','Backup and Restore: hourly RDS snapshots copied cross-region'],
+   ans:1,exp:'Warm Standby: scaled-down environment always running means scale-up in minutes (meets 10min RTO). RDS read replica replicates async with seconds lag (meets 1min RPO). Route53 health check failover in under 1 minute. Multi-Site Active/Active also works but costs 2x more (not lowest cost). Pilot Light and Backup/Restore cannot meet 10-minute RTO.'},
+  {n:5,dom:'Event Response',dif:'🟡 Medium',
+   q:'Security team wants to automatically block an IAM user within 60 seconds of GuardDuty detecting suspicious credential usage. Which is the MOST automated approach?',
+   opts:['SNS from GuardDuty sends email to security team to manually disable','GuardDuty Finding -> EventBridge rule -> Lambda that attaches Deny all policy to user','CloudTrail -> CloudWatch Logs filter -> Alarm -> SNS -> Lambda to block','GuardDuty -> Security Hub -> Config rule remediation'],
+   ans:1,exp:'GuardDuty (seconds) -> EventBridge rule (milliseconds match) -> Lambda (sub-second execution) = total time measured in seconds, well within 60s. Lambda calls IAM to attach an explicit Deny * policy or disable the user. Option C fails because CloudTrail delivery alone takes 5-15 minutes, far exceeding 60 seconds.'},
+  {n:6,dom:'Monitoring',dif:'🟡 Medium',
+   q:'Lambda processes SQS messages. CloudWatch alarm on ApproximateNumberOfMessagesVisible stays in INSUFFICIENT_DATA. What is most likely the cause?',
+   opts:['Wrong metric namespace — SQS metrics are in AWS/SQS with QueueName dimension not AWS/Lambda','SQS requires enabling detailed monitoring for this metric','The alarm evaluation period must be minimum 5 minutes for SQS','Lambda event source mapping does not emit SQS metrics'],
+   ans:0,exp:'SQS metrics like ApproximateNumberOfMessagesVisible are in namespace AWS/SQS with dimension QueueName. If the alarm was created with wrong namespace or wrong dimension value (wrong queue name, wrong case), no data points arrive and the alarm stays in INSUFFICIENT_DATA. Always verify in CloudWatch Metrics browser that the metric actually exists with the exact dimension values before creating alarms.'}
+];
+
+// Cheat sheet data
+var CHEAT = [
+  {t:'Lambda Limits',rows:[['Max duration','15 minutes'],['Memory range','128MB to 10,240MB'],['Ephemeral /tmp','512MB to 10,240MB'],['Deployment zip','50MB (250MB unzipped)'],['Container image','10GB'],['Default concurrency','1,000 per region (soft)'],['Burst limit','3,000 initial + 500/min'],['Provisioned concurrency','Pre-warm: no cold start']]},
+  {t:'SQS Key Values',rows:[['Max message size','256 KB'],['Max retention','14 days (default 4 days)'],['Visibility timeout','0s to 12 hours'],['Long poll max wait','20 seconds'],['FIFO throughput','300/s or 3,000/s batched'],['DLQ maxReceiveCount','1 to 1,000'],['Deduplication window','5 minutes (FIFO only)'],['Lambda trigger max batch','10,000 messages']]},
+  {t:'IAM Policy Evaluation',rows:[['Explicit Deny','ALWAYS wins over any Allow'],['SCP effect','Max boundary for entire account'],['Permission Boundary','Max ceiling for user or role'],['Resource policy alone','Grants cross-account access'],['Same-account access','Identity OR resource policy needed'],['Evaluation order','SCP > Boundary > Identity > Resource'],['Session policies','Further restrict assumed role'],['Condition operators','StringEquals, ArnLike, IpAddress, Bool']]},
+  {t:'CloudWatch Key Facts',rows:[['Standard resolution','1 minute minimum'],['High-res custom metrics','1 second'],['Composite alarm','AND or OR of multiple alarms'],['Missing data behavior','Breaching vs not-breaching matters'],['Log Insights price','Per GB scanned'],['Synthetics','Scheduled URL monitoring scripts'],['Anomaly detection','ML-based dynamic band'],['Alarm states','OK, ALARM, INSUFFICIENT_DATA']]},
+  {t:'DR Strategy Guide',rows:[['Backup and Restore','RTO hours, RPO hours, cheapest'],['Pilot Light','RTO 10-30min, RPO minutes'],['Warm Standby','RTO minutes, RPO seconds'],['Active/Active','RTO zero, RPO zero, most expensive'],['Aurora Global DB','RPO under 1 second, RTO under 1 minute'],['DynamoDB Global Tables','Active-Active, under 1s replication'],['S3 CRR','Near real-time cross-region'],['Route53 TTL for DR','Set to 60s for fast DNS failover']]},
+  {t:'DOP-C02 Exam Domains',rows:[['SDLC Automation','22%'],['Config Management and IaC','17%'],['Monitoring and Logging','15%'],['Policies and Standards','10%'],['Incident and Event Response','18%'],['HA, Fault Tolerance, DR','18%'],['Total questions','75 questions'],['Exam duration','180 minutes']]},
+  {t:'ECS vs EKS Quick Pick',rows:[['Simple containers, no K8s','ECS Fargate'],['Full Kubernetes ecosystem','EKS'],['GPU workloads','ECS EC2 or EKS'],['GitOps with ArgoCD','EKS'],['Fastest to production','ECS Fargate'],['Service mesh','EKS with App Mesh or Istio'],['Pod-level IAM roles','EKS with IRSA'],['Spot cost optimization','Both support Spot capacity']]},
+  {t:'CodeDeploy Strategies',rows:[['All-At-Once','Fast, has downtime, dev/test only'],['Rolling','Gradual, partial capacity reduction'],['Rolling + Extra Batch','No capacity loss, more cost'],['Blue/Green EC2','Zero downtime, instant rollback'],['Blue/Green ECS','2 task sets + ALB traffic shift'],['Lambda Canary','% shift + wait + auto-rollback'],['Lambda Linear','Gradual linear shift over time'],['On-Premises','Same as EC2 strategies']]}
+];
+
+var TUTOR_QS = [
+  'SQS vs SNS vs EventBridge simply explained',
+  'Blue/Green deployment step by step',
+  'IAM policy evaluation rules',
+  'NLB vs ALB when to use which',
+  'RDS Multi-AZ vs Read Replica',
+  'Lambda Provisioned Concurrency',
+  'DR strategy: 10 min RTO, 1 min RPO',
+  'CloudFormation drift detection'
+];
+
+// ============================================================
+// RENDER FUNCTIONS — all safe, no strings in onclick
+// ============================================================
+
+function esc(s){ return String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function renderChips(){
+  var h='';
+  for(var i=0;i<CHIPS.length;i++){
+    h+='<span class="chip">'+CHIPS[i]+'</span>';
+  }
+  document.getElementById('heroChips').innerHTML=h;
+}
+
+function renderRoadmap(){
+  var h='';
+  for(var i=0;i<ROADMAP.length;i++){
+    var r=ROADMAP[i];
+    h+='<div class="rc '+r.lv+'"><div class="rc-tag">Level '+(i+1)+'</div><h3>'+r.em+' '+r.t+'</h3>';
+    for(var j=0;j<r.items.length;j++) h+='<div class="ri">'+r.items[j]+'</div>';
+    h+='</div>';
+  }
+  document.getElementById('rmapGrid').innerHTML=h;
+}
+
+function renderDomain(gid, svcs){
+  var h='';
+  for(var i=0;i<svcs.length;i++){
+    var s=svcs[i];
+    h+='<div class="sc" data-svc="'+s.id+'">';
+    h+='<div class="sc-top"><div class="sc-head"><div class="sc-icon" style="background:'+s.col+';border:1px solid '+s.bc+'">'+s.ico+'</div>';
+    h+='<div><h3>'+s.nm+'</h3><div class="sc-cat">'+s.cat+'</div></div></div>';
+    h+='<div class="sc-simple">'+s.si+'</div></div>';
+    h+='<div class="sc-body"><div class="when-lbl">When to Use</div>';
+    for(var j=0;j<s.wh.length;j++) h+='<div class="wi">'+s.wh[j]+'</div>';
+    h+='<div class="sc-tags">';
+    for(var k=0;k<s.tg.length;k++) h+='<span class="stag">'+s.tg[k]+'</span>';
+    h+='</div></div>';
+    h+='<div class="sc-foot"><button class="sc-btn" data-svc="'+s.id+'">🧪 Lab + Code ›</button>';
+    h+='<button class="sc-btn" data-svc="'+s.id+'">Deep Dive ›</button></div></div>';
+  }
+  document.getElementById(gid).innerHTML=h;
+}
+
+// Build lookup for all services
+var ALL_SVCS={};
+var domainKeys=['d1','d2','d3','d4','d5','d6'];
+for(var dk=0;dk<domainKeys.length;dk++){
+  var darr=SVCS[domainKeys[dk]];
+  for(var di=0;di<darr.length;di++) ALL_SVCS[darr[di].id]=darr[di];
+}
+
+function showSvcDetail(id){
+  var s=ALL_SVCS[id];
+  if(!s) return;
+  var h='';
+  h+='<div style="font-family:var(--mono);font-size:10px;color:var(--o);margin-bottom:4px">'+s.cat+'</div>';
+  h+='<h2 style="font-size:20px;font-weight:700;margin-bottom:14px">'+s.ico+' '+s.nm+'</h2>';
+  h+='<div style="background:var(--gd);border:1px solid var(--gb);border-radius:8px;padding:13px;margin-bottom:14px">';
+  h+='<div style="font-family:var(--mono);font-size:9px;color:var(--g);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Simple Explanation</div>';
+  h+='<div style="font-family:var(--mono);font-size:12px;color:var(--t);line-height:1.8">'+s.si+'</div></div>';
+  h+='<div style="background:var(--bd);border:1px solid var(--bb);border-radius:8px;padding:13px;margin-bottom:14px">';
+  h+='<div style="font-family:var(--mono);font-size:9px;color:var(--b);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Professional Detail</div>';
+  h+='<div style="font-family:var(--mono);font-size:12px;color:var(--t);line-height:1.8">'+s.pr+'</div></div>';
+  h+='<div style="margin-bottom:14px"><div style="font-family:var(--mono);font-size:9px;color:var(--o);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:1px">When to Use</div>';
+  for(var i=0;i<s.wh.length;i++) h+='<div style="font-family:var(--mono);font-size:11px;color:var(--t2);padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);display:flex;gap:7px"><span style="color:var(--o)">▸</span>'+s.wh[i]+'</div>';
+  h+='</div>';
+  h+='<div class="cblk"><div class="ctop"><span>'+s.nm+' — Real Code Example</span></div><div class="cbody">'+esc(s.code)+'</div></div>';
+  if(s.ex) h+='<div style="background:rgba(255,214,10,.04);border:1px solid rgba(255,214,10,.2);border-radius:8px;padding:13px;margin-top:12px"><div style="font-family:var(--mono);font-size:9px;color:var(--y);font-weight:700;margin-bottom:5px">EXAM TIP</div><div style="font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.8">'+s.ex+'</div></div>';
+  if(s.lb){
+    h+='<div style="margin-top:12px"><div style="font-family:var(--mono);font-size:9px;color:var(--g);font-weight:700;margin-bottom:7px;text-transform:uppercase;letter-spacing:1px">Hands-On Labs</div>';
+    for(var j=0;j<s.lb.length;j++) h+='<div style="font-family:var(--mono);font-size:11px;color:var(--t2);padding:4px 0;display:flex;gap:7px"><span style="color:var(--g)">🧪</span>'+s.lb[j]+'</div>';
+    h+='</div>';
+  }
+  openModal(h);
+}
+
+function openModal(html){
+  document.getElementById('mContent').innerHTML=html;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+}
+
+// PIPELINE
+var pActive=false, pTimer=null, pType='cicd', pLogIdx=0;
+
+function renderPipeline(){
+  var p=PIPE_DATA[pType];
+  var h='<div class="pipe-bar">';
+  h+='<button class="run-btn" id="pRunBtn">▶ Run Pipeline</button>';
+  h+='<button class="rst-btn" id="pRstBtn">&#8635; Reset</button>';
+  h+='<span style="font-family:var(--mono);font-size:10px;color:var(--t3)">Real AWS · Animated</span>';
+  h+='<div class="ptabs">';
+  h+='<button class="ptab'+(pType==='cicd'?' on':'')+'" data-pipe="cicd">Full CI/CD</button>';
+  h+='<button class="ptab'+(pType==='serverless'?' on':'')+'" data-pipe="serverless">Serverless</button>';
+  h+='<button class="ptab'+(pType==='terraform'?' on':'')+'" data-pipe="terraform">Terraform</button>';
+  h+='</div></div>';
+  h+='<div class="pipe-stages" id="pStages">';
+  for(var i=0;i<p.stages.length;i++){
+    var s=p.stages[i];
+    if(i>0) h+='<div class="parrow">&#8250;</div>';
+    h+='<div class="pstage"><div class="psb" id="psb'+i+'"><div class="psdot" id="psd'+i+'"></div>';
+    h+='<div class="psicon">'+s.ico+'</div><div class="psname">'+s.n+'</div><div class="pssvc">'+s.svc+'</div>';
+    h+='</div></div>';
+  }
+  h+='</div>';
+  h+='<div class="plog-wrap"><div class="plog-head"><span>● Pipeline Log</span><span id="pStat" style="color:var(--t3)">Ready</span></div>';
+  h+='<div class="plog-body" id="pLog"><span style="color:var(--t3)">Press Run to start pipeline simulation...</span></div></div>';
+  document.getElementById('pipeBox').innerHTML=h;
+
+  // Attach events
+  document.getElementById('pRunBtn').addEventListener('click', runPipe);
+  document.getElementById('pRstBtn').addEventListener('click', resetPipe);
+  var tabs=document.querySelectorAll('.ptab');
+  for(var t=0;t<tabs.length;t++){
+    tabs[t].addEventListener('click', function(){
+      pType=this.getAttribute('data-pipe');
+      resetPipe();
+      renderPipeline();
+    });
+  }
+  renderFlowSteps(p);
+}
+
+function renderFlowSteps(p){
+  var h='<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--t2);margin-bottom:11px">How this pipeline works — step by step:</div>';
+  for(var i=0;i<p.explain.length;i++){
+    var e=p.explain[i];
+    var ico=p.stages[i]?p.stages[i].ico:'';
+    h+='<div class="fstep"><div class="fsn">'+(i+1)+'</div>';
+    h+='<div class="fsb"><h4>'+ico+' '+e.n+' — '+e.t+'</h4><p>'+e.d+'</p></div></div>';
+  }
+  document.getElementById('fsteps').innerHTML=h;
+}
+
+function runPipe(){
+  if(pActive) return;
+  pActive=true; pLogIdx=0;
+  var btn=document.getElementById('pRunBtn');
+  if(btn){btn.disabled=true;btn.textContent='⏳ Running...';}
+  var stat=document.getElementById('pStat');
+  if(stat) stat.textContent='Running...';
+  var log=document.getElementById('pLog');
+  if(log) log.innerHTML='';
+  var p=PIPE_DATA[pType];
+  for(var i=0;i<p.stages.length;i++){
+    var b=document.getElementById('psb'+i);
+    var d=document.getElementById('psd'+i);
+    if(b) b.className='psb';
+    if(d) d.className='psdot';
+  }
+  doLog();
+}
+
+function doLog(){
+  var p=PIPE_DATA[pType];
+  if(pLogIdx>=p.logs.length){
+    pActive=false;
+    var btn=document.getElementById('pRunBtn');
+    if(btn){btn.disabled=false;btn.textContent='▶ Run Again';}
+    var stat=document.getElementById('pStat');
+    if(stat) stat.textContent='✅ Complete';
+    return;
+  }
+  var entry=p.logs[pLogIdx];
+  var log=document.getElementById('pLog');
+  if(log){
+    var d=document.createElement('div');
+    d.className='ll '+entry.c;
+    d.innerHTML='<span class="lt">['+entry.t+']</span> '+entry.m;
+    log.appendChild(d);
+    log.scrollTop=log.scrollHeight;
+  }
+  // update stages
+  for(var i=0;i<p.stages.length;i++){
+    var tag='['+p.stages[i].n.toUpperCase()+']';
+    if(entry.m.indexOf(tag)===0 || entry.m.indexOf(tag)>-1){
+      var box=document.getElementById('psb'+i);
+      var dot=document.getElementById('psd'+i);
+      if(box && dot){
+        if(entry.m.indexOf('OK ')>-1 || entry.m.indexOf('COMPLETE')>-1){
+          box.className='psb done'; dot.className='psdot ok';
+        } else if(entry.c==='le'){
+          box.className='psb fail'; dot.className='psdot err';
+        } else {
+          box.className='psb run'; dot.className='psdot run';
+        }
+      }
+    }
+  }
+  pLogIdx++;
+  var delay=entry.c==='lw'?900:entry.c==='ls'?550:280;
+  pTimer=setTimeout(doLog, delay);
+}
+
+function resetPipe(){
+  if(pTimer) clearTimeout(pTimer);
+  pActive=false; pLogIdx=0;
+  var btn=document.getElementById('pRunBtn');
+  if(btn){btn.disabled=false;btn.textContent='▶ Run Pipeline';}
+  var stat=document.getElementById('pStat');
+  if(stat) stat.textContent='Ready';
+  var log=document.getElementById('pLog');
+  if(log) log.innerHTML='<span style="color:var(--t3)">Logs cleared. Press Run to start...</span>';
+  for(var i=0;i<10;i++){
+    var b=document.getElementById('psb'+i);
+    var d=document.getElementById('psd'+i);
+    if(b) b.className='psb';
+    if(d) d.className='psdot';
+  }
+}
+
+// ARCHITECTURE
+function renderArch(){
+  function node(ico,lbl,cls,badge){
+    var style='background:rgba(255,153,0,.08);border-color:rgba(255,153,0,.3);color:var(--o)';
+    if(cls==='bl') style='background:rgba(74,158,255,.08);border-color:rgba(74,158,255,.3);color:var(--b)';
+    if(cls==='gr') style='background:rgba(0,214,143,.08);border-color:rgba(0,214,143,.3);color:var(--g)';
+    if(cls==='nt') style='background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.1);color:var(--t2)';
+    var h='<div class="anode"><div class="anbox" style="'+style+'" data-info="'+lbl+'">';
+    h+='<div class="an-ico">'+ico+'</div><div class="an-lbl">'+lbl+'</div></div>';
+    if(badge) h+='<div class="an-badge">'+badge+'</div>';
+    h+='</div>';
+    return h;
+  }
+  function line(c){ return '<div class="aline '+c+'"></div>'; }
+  function arr(){ return '<div class="aarr">&#8250;</div>'; }
+
+  var h='<div style="font-family:var(--mono);font-size:10px;color:var(--t3);margin-bottom:16px;text-align:center">Click any service for details · Animated data flows show real traffic patterns</div>';
+  h+='<div class="arch-layer"><div class="layer-lbl">GLOBAL EDGE</div><div class="arow">';
+  h+=node('👥','Users','nt')+line('or')+arr()+node('🛡️','WAF','','')+line('or')+arr()+node('☁️','CloudFront','','CDN')+line('or')+arr()+node('⚡','Global Acc.','','anycast')+line('or')+arr()+node('🌐','Route53','','DNS');
+  h+='</div></div>';
+  h+='<div class="arch-layer"><div class="layer-lbl">VPC — PUBLIC SUBNETS (3 AZs)</div><div class="arow">';
+  h+=node('⚖️','ALB','bl','L7')+line('bl')+arr()+node('🔗','API Gateway','bl','')+line('bl')+arr()+node('🌍','NAT GW','bl','HA');
+  h+='</div></div>';
+  h+='<div class="arch-layer"><div class="layer-lbl">VPC — PRIVATE SUBNETS (COMPUTE)</div><div class="arow">';
+  h+=node('📦','ECS Fargate','gr','')+node('☸️','EKS','gr','')+node('⚡','Lambda','gr','')+node('💻','EC2 ASG','gr','x3 AZ');
+  h+=line('gr')+arr()+node('🔑','Secrets Mgr','','')+node('⚙️','SSM Params','','')+node('🔐','KMS','','');
+  h+='</div></div>';
+  h+='<div class="arch-layer"><div class="layer-lbl">DATA LAYER (MULTI-AZ)</div><div class="arow">';
+  h+=node('🗄️','Aurora','','Multi-AZ')+node('⚡','DynamoDB','','Global')+node('🏎️','ElastiCache','','')+node('📦','S3','','')+node('🔍','OpenSearch','','')+node('📊','Redshift','','');
+  h+='</div></div>';
+  h+='<div class="arch-layer"><div class="layer-lbl">OBSERVABILITY AND SECURITY</div><div class="arow">';
+  h+=node('📊','CloudWatch','bl','')+node('🔍','X-Ray','bl','')+node('📋','CloudTrail','bl','')+node('🚨','GuardDuty','bl','ML')+node('🏛️','Config','bl','')+node('🔒','Security Hub','bl','')+node('🕵️','Macie','bl','')+node('🔎','Inspector','bl','');
+  h+='</div></div>';
+  document.getElementById('archBox').innerHTML=h;
+
+  // Add compare tables
+  var ct='';
+  var tables=[
+    {t:'ECS vs EKS vs Lambda — Decision Guide',
+     rows:[['','ECS Fargate','EKS','Lambda'],
+           ['Orchestration','Managed containers','Full Kubernetes','Functions only'],
+           ['Operational overhead','Medium','High','Lowest'],
+           ['Kubernetes ecosystem','No','Yes - full K8s','No'],
+           ['Max runtime','Unlimited','Unlimited','15 minutes'],
+           ['Cold start','Seconds','Pod scheduling','100ms to 5s'],
+           ['Best for','Microservices APIs','Large K8s platforms','Events, short tasks']]},
+    {t:'SQS vs SNS vs EventBridge vs Kinesis',
+     rows:[['','SQS','SNS','EventBridge','Kinesis'],
+           ['Pattern','Queue pull','Pub/Sub push','Event Bus push','Stream pull'],
+           ['Message persistence','Up to 14 days','No','No','1 to 365 days'],
+           ['Fan-out','Single consumer','Multi-subscriber','Multi-rule','Multi-consumer'],
+           ['Ordering','FIFO only','No','No','Per shard'],
+           ['Replay','No','No','Archive optional','Yes'],
+           ['Best for','Decouple, retry','Notifications','AWS automation','Real-time streams']]}
+  ];
+  for(var ti=0;ti<tables.length;ti++){
+    var tbl=tables[ti];
+    ct+='<div style="margin-bottom:24px"><h3 style="font-size:14px;font-weight:700;margin-bottom:12px">'+tbl.t+'</h3>';
+    ct+='<div class="cmp"><table class="ctbl">';
+    for(var ri=0;ri<tbl.rows.length;ri++){
+      var row=tbl.rows[ri];
+      ct+='<tr>';
+      for(var ci=0;ci<row.length;ci++){
+        var cell=row[ci];
+        var cls='';
+        if(cell==='Yes'||cell.indexOf('Multi')===0) cls='yes';
+        if(cell==='No') cls='no';
+        if(ri===0) ct+='<th>'+cell+'</th>';
+        else ct+='<td class="'+cls+'">'+cell+'</td>';
+      }
+      ct+='</tr>';
+    }
+    ct+='</table></div></div>';
+  }
+  document.getElementById('cmpBox').innerHTML=ct;
+}
+
+// HYBRID
+function renderHybrid(){
+  var h='<div class="hgrid">';
+  h+='<div class="hpanel"><div class="hpanel-lbl" style="color:var(--b)">🏢 On-Premises Datacenter</div>';
+  var ops=[['🖥️','Physical Servers / VMs','VMware ESXi, bare metal'],['🗄️','On-Prem Databases','Oracle, SQL Server, legacy apps'],['📁','File Servers','NFS and SMB shared storage'],['🏢','Active Directory','Internal identity and LDAP'],['🔧','Legacy Apps','Cannot migrate to cloud'],['🔌','Private WAN','MPLS internal corporate network']];
+  for(var i=0;i<ops.length;i++) h+='<div class="hsvc"><div class="hsvc-ico">'+ops[i][0]+'</div><div><div class="hsvc-n">'+ops[i][1]+'</div><div class="hsvc-d">'+ops[i][2]+'</div></div></div>';
+  h+='</div>';
+  h+='<div class="hmid">';
+  h+='<div class="cpill"><div class="cpill-n">🔌 AWS Direct Connect</div><div class="cpill-d">1Gbps or 10Gbps private circuit<br>from datacenter to AWS</div></div>';
+  h+='<div class="cline"></div><div style="font-family:var(--mono);font-size:9px;color:var(--t3);text-align:center">AND/OR redundancy</div><div class="cline"></div>';
+  h+='<div class="cpill"><div class="cpill-n">🔐 Site-to-Site VPN</div><div class="cpill-d">IPSec over internet<br>BGP routing, 2 tunnels</div></div>';
+  h+='<div class="cline"></div>';
+  h+='<div class="cpill" style="background:rgba(74,158,255,.08);border-color:rgba(74,158,255,.3)"><div class="cpill-n" style="color:var(--b)">🌐 Transit Gateway</div><div class="cpill-d">Hub for 1000s of VPCs<br>plus on-prem networks</div></div>';
+  h+='<div class="cline"></div><div style="font-family:var(--mono);font-size:9px;color:var(--t3);text-align:center">Encrypted both directions</div>';
+  h+='</div>';
+  h+='<div class="hpanel"><div class="hpanel-lbl" style="color:var(--o)">☁️ AWS Cloud (VPC)</div>';
+  var aws=[['💻','EC2 / ECS / EKS','Cloud compute workloads'],['🗄️','RDS / Aurora','Managed databases'],['📦','S3 Storage','Unlimited object storage'],['🔐','IAM / SSO','Federated identity'],['📊','CloudWatch + X-Ray','Unified observability'],['🔧','SSM Systems Manager','Manages on-prem servers too']];
+  for(var j=0;j<aws.length;j++) h+='<div class="hsvc"><div class="hsvc-ico">'+aws[j][0]+'</div><div><div class="hsvc-n">'+aws[j][1]+'</div><div class="hsvc-d">'+aws[j][2]+'</div></div></div>';
+  h+='</div></div>';
+  h+='<div class="igrid">';
+  var cards=[['🔍','Route53 Resolver','Inbound: on-prem DNS resolves AWS VPC names. Outbound: EC2 resolves on-prem DNS. Forwarding rules per domain.'],['🖥️','SSM Hybrid Activations','Register on-prem servers as SSM Managed Instances. Session Manager, Patch, Run Command — no SSH port needed.'],['📁','Storage Gateway','File GW: NFS/SMB to S3. Volume GW: iSCSI block to S3. Tape GW: virtual tapes to Glacier. Runs as VM appliance on-prem.'],['🔄','AWS DataSync','Automated, 10x faster data transfer between on-prem NFS/SMB and S3/EFS/FSx. Scheduled, encrypted, checksummed.'],['🌩️','AWS Outposts','AWS hardware in your datacenter. Run EC2, ECS, RDS on-prem with same AWS APIs and same console.'],['🔐','VPN CloudHub','Multiple branch offices connect to AWS as hub. Branch-to-branch traffic routes through AWS backbone.']];
+  for(var k=0;k<cards.length;k++) h+='<div class="icard"><div class="icard-ico">'+cards[k][0]+'</div><div class="icard-t">'+cards[k][1]+'</div><div class="icard-d">'+cards[k][2]+'</div></div>';
+  h+='</div>';
+  document.getElementById('hybridBox').innerHTML=h;
+}
+
+// LABS
+function renderLabs(){
+  var h='';
+  for(var i=0;i<LABS.length;i++){
+    var l=LABS[i];
+    h+='<div class="lab"><div class="lab-h"><div class="lab-ico">'+l.ico+'</div>';
+    h+='<div><div class="lab-title">'+l.t+'</div><div class="lab-sub">'+l.b+'</div></div>';
+    h+='<div class="lab-badge">HANDS-ON</div></div>';
+    h+='<div class="lab-body"><div class="lab-obj">'+l.obj+'</div>';
+    h+='<div class="lsteps">';
+    for(var j=0;j<l.steps.length;j++){
+      h+='<div class="lstep"><div class="lsn">'+(j+1)+'</div>';
+      h+='<div class="lst"><b>'+l.steps[j].t+':</b> '+l.steps[j].d+'</div></div>';
+    }
+    h+='</div>';
+    h+='<div class="lab-checks"><div class="lchk-title">Success Criteria</div>';
+    for(var k=0;k<l.checks.length;k++) h+='<div class="lchk-item">'+l.checks[k]+'</div>';
+    h+='</div></div></div>';
+  }
+  document.getElementById('labsBox').innerHTML=h;
+}
+
+// DEBUG
+function renderDebug(){
+  var h='';
+  for(var i=0;i<BUGS.length;i++){
+    var b=BUGS[i];
+    h+='<div class="dbug"><div class="dbug-h '+b.tp+'">';
+    h+='<span style="font-size:20px">'+b.ico+'</span><div class="dbug-title">'+b.t+'</div>';
+    h+='<div class="dbug-svc">'+b.svc+'</div></div>';
+    h+='<div class="dbug-body">';
+    h+='<div class="err-box">Error: '+b.err+'</div>';
+    h+='<div class="why-box">Why this happens: '+b.why+'</div>';
+    h+='<div style="font-family:var(--mono);font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Step-by-Step Fix</div>';
+    h+='<div class="fxs">';
+    for(var j=0;j<b.steps.length;j++){
+      h+='<div class="fx"><div class="fxn">'+(j+1)+'</div><div class="fxt">'+b.steps[j]+'</div></div>';
+    }
+    h+='</div></div></div>';
+  }
+  document.getElementById('debugBox').innerHTML=h;
+}
+
+// QUIZ
+function renderQuiz(){
+  var h='';
+  for(var i=0;i<QUIZ.length;i++){
+    var q=QUIZ[i];
+    h+='<div class="qcard"><div class="qmeta">';
+    h+='<span class="qn">Q'+q.n+' of '+QUIZ.length+'</span>';
+    h+='<span class="qdom">'+q.dom+'</span>';
+    h+='<span class="qdif">'+q.dif+'</span></div>';
+    h+='<div class="qq-q">'+q.q+'</div>';
+    h+='<div class="qopts" id="qopts'+q.n+'">';
+    var letters=['A','B','C','D'];
+    for(var j=0;j<q.opts.length;j++){
+      h+='<div class="qopt" data-qn="'+q.n+'" data-idx="'+j+'" data-ans="'+q.ans+'">';
+      h+='<div class="qltr">'+letters[j]+'</div><div>'+q.opts[j]+'</div></div>';
+    }
+    h+='</div>';
+    h+='<div class="qexp" id="qe'+q.n+'">Correct: '+letters[q.ans]+'<br><br>'+q.exp+'</div></div>';
+  }
+  document.getElementById('quizBox').innerHTML=h;
+}
+
+// CHEAT SHEET
+function renderCheat(){
+  var h='';
+  for(var i=0;i<CHEAT.length;i++){
+    var c=CHEAT[i];
+    h+='<div class="cheat-card"><h4>'+c.t+'</h4>';
+    for(var j=0;j<c.rows.length;j++){
+      h+='<div class="crow"><span class="ck">'+c.rows[j][0]+'</span><span class="cv">'+c.rows[j][1]+'</span></div>';
+    }
+    h+='</div>';
+  }
+  document.getElementById('cheatBox').innerHTML=h;
+  // Progress bars
+  var domains=[['SDLC Automation',22],['Config Management and IaC',17],['Monitoring and Logging',15],['Policies and Standards',10],['Incident and Event Response',18],['HA, Fault Tolerance, DR',18]];
+  var ph='<div style="text-align:center;font-family:var(--mono);font-size:11px;color:var(--t2);margin-bottom:18px">DOP-C02 Exam Domain Weights · 75 Questions · 180 Minutes</div>';
+  for(var k=0;k<domains.length;k++){
+    ph+='<div class="pb-item"><div class="pb-lbl"><span>'+domains[k][0]+'</span><span style="color:var(--o)">'+domains[k][1]+'%</span></div>';
+    ph+='<div class="pb-track"><div class="pb-fill" data-w="'+domains[k][1]+'"></div></div></div>';
+  }
+  document.getElementById('pbBox').innerHTML=ph;
+  setTimeout(function(){
+    var fills=document.querySelectorAll('.pb-fill');
+    for(var f=0;f<fills.length;f++) fills[f].style.width=fills[f].getAttribute('data-w')+'%';
+  }, 400);
+}
+
+// TUTOR
+function renderTutorQs(){
+  var h='';
+  for(var i=0;i<TUTOR_QS.length;i++){
+    h+='<div class="qq" data-q="'+i+'">'+TUTOR_QS[i]+'</div>';
+  }
+  document.getElementById('tutorQQ').innerHTML=h;
+}
+
+function addMsg(role, text){
+  var msgs=document.getElementById('tutorMsgs');
+  if(!msgs) return;
+  var safe=text.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  safe=safe.replace(/`([^`]+)`/g,'<code style="color:var(--o);background:var(--od);padding:1px 5px;border-radius:3px">$1</code>');
+  safe=safe.replace(/\n/g,'<br>');
+  var d=document.createElement('div');
+  d.className='tmsg '+role;
+  d.innerHTML='<div class="tav">'+(role==='ai'?'🤖':'👤')+'</div><div class="tbub">'+safe+'</div>';
+  msgs.appendChild(d);
+  msgs.scrollTop=msgs.scrollHeight;
+}
+
+function sendMsg(){
+  var inp=document.getElementById('tutorInp');
+  var msg=inp?inp.value.trim():'';
+  if(!msg) return;
+  inp.value='';
+  addMsg('user',msg);
+  var btn=document.getElementById('tsendBtn');
+  if(btn) btn.disabled=true;
+  var ty=document.getElementById('tutorTyping');
+  if(ty) ty.style.display='flex';
+  var msgs=document.getElementById('tutorMsgs');
+  if(msgs) msgs.scrollTop=msgs.scrollHeight;
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      system:'You are an expert AWS DevOps Engineer teaching the DOP-C02 certification. Be conversational but technical. Give simple analogies first, then professional depth. Include CLI or YAML examples when relevant. Mention exam tips. Keep to 2-4 paragraphs. Use line breaks for readability.',
+      messages:[{role:'user',content:msg}]
+    })
+  }).then(function(res){return res.json();}).then(function(data){
+    if(ty) ty.style.display='none';
+    var txt='';
+    if(data.content) for(var i=0;i<data.content.length;i++) txt+=data.content[i].text||'';
+    addMsg('ai', txt||'Could not get a response. Please try again.');
+    if(btn) btn.disabled=false;
+    if(msgs) msgs.scrollTop=msgs.scrollHeight;
+  }).catch(function(){
+    if(ty) ty.style.display='none';
+    addMsg('ai','Connection error. Check your network and try again.');
+    if(btn) btn.disabled=false;
+  });
+}
+
+// INIT & EVENT DELEGATION
+document.addEventListener('DOMContentLoaded', function(){
+  // Render all sections
+  renderChips();
+  renderRoadmap();
+  renderDomain('d1g', SVCS.d1);
+  renderDomain('d2g', SVCS.d2);
+  renderDomain('d3g', SVCS.d3);
+  renderDomain('d4g', SVCS.d4);
+  renderDomain('d5g', SVCS.d5);
+  renderDomain('d6g', SVCS.d6);
+  renderPipeline();
+  renderArch();
+  renderHybrid();
+  renderLabs();
+  renderDebug();
+  renderTutorQs();
+  renderQuiz();
+  renderCheat();
+
+  // Global event delegation — no onclick in HTML at all
+  document.body.addEventListener('click', function(e){
+    var el=e.target;
+
+    // Nav buttons
+    if(el.classList.contains('nb') && el.getAttribute('data-goto')){
+      var dest=el.getAttribute('data-goto');
+      if(dest==='hero'){window.scrollTo(0,0);}
+      else{var sec=document.getElementById(dest);if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});}
+    }
+
+    // Hero/section goto buttons
+    if(el.getAttribute('data-goto')){
+      var gt=el.getAttribute('data-goto');
+      if(gt==='hero'){window.scrollTo(0,0);}
+      else{var gs=document.getElementById(gt);if(gs)gs.scrollIntoView({behavior:'smooth',block:'start'});}
+    }
+
+    // Service cards and buttons
+    if(el.classList.contains('sc-btn') && el.getAttribute('data-svc')){
+      showSvcDetail(el.getAttribute('data-svc'));
+    }
+    if(el.classList.contains('sc') && el.getAttribute('data-svc')){
+      showSvcDetail(el.getAttribute('data-svc'));
+    }
+    // Click on child elements of service card
+    var scParent=el.closest('.sc');
+    if(scParent && el.tagName!=='BUTTON' && scParent.getAttribute('data-svc')){
+      showSvcDetail(scParent.getAttribute('data-svc'));
+    }
+
+    // Architecture nodes
+    if(el.classList.contains('anbox') && el.getAttribute('data-info')){
+      openModal('<h3 style="color:var(--o);margin-bottom:12px">'+el.getAttribute('data-info')+'</h3><p style="font-family:var(--mono);font-size:12px;color:var(--t2)">See the domain sections above for detailed documentation, code examples, and exam tips for each service.</p>');
+    }
+
+    // Quiz options
+    if(el.classList.contains('qopt')){
+      var qn=el.getAttribute('data-qn');
+      var idx=parseInt(el.getAttribute('data-idx'));
+      var ans=parseInt(el.getAttribute('data-ans'));
+      var allOpts=document.querySelectorAll('[data-qn="'+qn+'"].qopt');
+      for(var oi=0;oi<allOpts.length;oi++){
+        allOpts[oi].style.cursor='default';
+        allOpts[oi].setAttribute('data-done','1');
+      }
+      for(var qi=0;qi<allOpts.length;qi++){
+        var qidx=parseInt(allOpts[qi].getAttribute('data-idx'));
+        if(qidx===ans) allOpts[qi].classList.add('correct');
+        else if(qidx===idx && idx!==ans) allOpts[qi].classList.add('wrong');
+      }
+      var exp=document.getElementById('qe'+qn);
+      if(exp) exp.classList.add('show');
+    }
+    // Prevent double answer
+    if(el.classList.contains('qopt') && el.getAttribute('data-done')) return;
+
+    // Tutor quick questions
+    if(el.classList.contains('qq') && el.getAttribute('data-q')!==null){
+      var qi2=parseInt(el.getAttribute('data-q'));
+      var inp=document.getElementById('tutorInp');
+      if(inp) inp.value=TUTOR_QS[qi2];
+    }
+
+    // Modal close
+    if(el.id==='modal' || el.id==='mcloseBtn') closeModal();
+
+    // Chips -> scroll to domain1
+    if(el.classList.contains('chip')){
+      var d1=document.getElementById('d1');
+      if(d1) d1.scrollIntoView({behavior:'smooth'});
+    }
+  });
+
+  // Tutor send button
+  var tsend=document.getElementById('tsendBtn');
+  if(tsend) tsend.addEventListener('click', sendMsg);
+
+  // Tutor input enter key
+  var tinp=document.getElementById('tutorInp');
+  if(tinp) tinp.addEventListener('keydown', function(e){
+    if(e.key==='Enter' && !e.shiftKey){e.preventDefault();sendMsg();}
+  });
+
+  // Intersection observer for reveal animations
+  var obs=new IntersectionObserver(function(entries){
+    for(var i=0;i<entries.length;i++){
+      if(entries[i].isIntersecting){entries[i].target.classList.add('in');obs.unobserve(entries[i].target);}
+    }
+  },{threshold:0.08});
+  var revEls=document.querySelectorAll('.rev');
+  for(var ri=0;ri<revEls.length;ri++) obs.observe(revEls[ri]);
+});
+</script>
+</body>
+</html>
